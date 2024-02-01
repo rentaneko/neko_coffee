@@ -1,4 +1,4 @@
 export 'cart_bloc.dart';
 export 'cart_event.dart';
-export 'cart_page.dart';
+export '../views/cart_page.dart';
 export 'cart_state.dart';

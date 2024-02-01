@@ -25,7 +25,17 @@ class LoadingAuthState extends AuthenticationState {
   const LoadingAuthState();
 }
 
+class WaitingAuthState extends AuthenticationState {}
+
 class ErrorAuthState extends AuthenticationState {
   const ErrorAuthState(this.errorMessage);
   final String errorMessage;
 }
+
+class SignInSuccessState extends AuthenticationState {}
+
+class SignUpSuccessState extends AuthenticationState {}
+
+class LoginButtonActionState extends AuthenticationState {}
+
+class SignUpButtonActionState extends AuthenticationState {}

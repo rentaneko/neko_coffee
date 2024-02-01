@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:neko_coffee/features/auth/views/signup_screen.dart';
+import 'package:neko_coffee/features/auth/views/login_screen.dart';
 import 'package:neko_coffee/features/cart/bloc/index.dart';
 import 'package:neko_coffee/features/home/bloc/index.dart';
 import 'package:neko_coffee/features/wishlist/bloc/index.dart';
@@ -45,7 +45,7 @@ class HomeScreenState extends State<HomeScreen> {
               MaterialPageRoute(builder: (context) => const WishlistScreen()));
         } else if (state is HomeNavigateToLoginScreenActionState) {
           Navigator.push(context,
-              MaterialPageRoute(builder: (context) => const SignUpScreen()));
+              MaterialPageRoute(builder: (context) => const LoginScreen()));
         }
       },
       builder: (context, state) {
@@ -101,56 +101,59 @@ class HomeScreenState extends State<HomeScreen> {
                           placeholder: (context, url) => Image.network(
                               'https://kellerheavy.vn/upload/source/loc-nuoc-dau-nguon-A2/7.png'),
                         ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              successState.products[index].name,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                fontWeight: FontWeight.w700,
-                                fontSize: 16.sp,
-                              ),
-                            ),
-                            RichText(
-                              text: TextSpan(
-                                text: '${successState.products[index].price}',
+                        SizedBox(width: 8.w),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                successState.products[index].name,
+                                overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                   fontWeight: FontWeight.w700,
                                   fontSize: 16.sp,
-                                  color: Colors.redAccent.shade400,
                                 ),
-                                children: [
-                                  TextSpan(
-                                    text: ' \$',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w700,
-                                      fontSize: 16.sp,
-                                    ),
+                              ),
+                              RichText(
+                                text: TextSpan(
+                                  text: '${successState.products[index].price}',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 16.sp,
+                                    color: Colors.redAccent.shade400,
                                   ),
+                                  children: [
+                                    TextSpan(
+                                      text: ' \$',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 16.sp,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Text(
+                                successState.products[index].desc!,
+                                overflow: TextOverflow.clip,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 14.sp,
+                                ),
+                              ),
+                              Row(
+                                children: [
+                                  IconButton(
+                                      onPressed: () {},
+                                      icon: Icon(Icons.favorite_outline_sharp)),
+                                  IconButton(
+                                      onPressed: () {},
+                                      icon: Icon(Icons
+                                          .shopping_cart_checkout_rounded)),
                                 ],
                               ),
-                            ),
-                            Text(
-                              successState.products[index].desc!,
-                              overflow: TextOverflow.clip,
-                              style: TextStyle(
-                                fontWeight: FontWeight.w400,
-                                fontSize: 14.sp,
-                              ),
-                            ),
-                            Row(
-                              children: [
-                                IconButton(
-                                    onPressed: () {},
-                                    icon: Icon(Icons.favorite_outline_sharp)),
-                                IconButton(
-                                    onPressed: () {},
-                                    icon: Icon(
-                                        Icons.shopping_cart_checkout_rounded)),
-                              ],
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ],
                     ),

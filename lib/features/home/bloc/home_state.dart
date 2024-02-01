@@ -22,15 +22,9 @@ class HomeLoadedSuccessState extends HomeState {
 }
 
 class HomeErrorState extends HomeState {
-  HomeErrorState(this.errorMessage);
+  const HomeErrorState(this.errorMessage);
 
   final String errorMessage;
-
-  @override
-  String toString() => 'ErrorHomeState';
-
-  @override
-  List<Object> get props => [errorMessage];
 }
 
 class HomeNavigateToWishlistScreenActionState extends HomeActionState {}

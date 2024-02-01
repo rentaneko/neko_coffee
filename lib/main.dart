@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:neko_coffee/features/auth/views/auth_screen.dart';
+import 'package:neko_coffee/routes/app_page.dart';
+import 'package:neko_coffee/routes/app_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 void main() async {
@@ -16,6 +19,7 @@ void main() async {
       autoRefreshToken: true,
     ),
   );
+
   await ScreenUtil.ensureScreenSize();
   runApp(const MyApp());
 }
@@ -25,11 +29,18 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ScreenUtil.init(context, designSize: const Size(393, 852));
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(primaryColor: Colors.teal),
-      home: const AuthScreen(),
+    return MultiBlocProvider(
+      providers: [...AppPages.blocer(context)],
+      child: ScreenUtilInit(
+        designSize: const Size(393, 852),
+        builder: (context, child) => MaterialApp(
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(primaryColor: Colors.teal),
+          navigatorObservers: [AppPages.observer],
+          initialRoute: SPLASH_ROUTE,
+          onGenerateRoute: AppPages.generateRouteSettings,
+        ),
+      ),
     );
   }
 }

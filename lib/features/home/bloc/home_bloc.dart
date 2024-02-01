@@ -6,6 +6,11 @@ import 'package:neko_coffee/features/home/models/home_product_data.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
+  //
+
+  final supabase = Supabase.instance.client;
+
+  //
   HomeBloc(HomeInitializedState homeInitializedState)
       : super(const HomeInitializedState()) {
     on<HomeInitialEvent>(homeInitialEvent);
@@ -37,14 +42,12 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   FutureOr<void> homeWishlistButtonNavigateEvent(
       HomeWishlistButtonNavigateEvent event, Emitter<HomeState> emit) {
-    final supabase = Supabase.instance.client;
     supabase.auth.signOut();
     emit(HomeNavigateToWishlistScreenActionState());
   }
 
   FutureOr<void> homeCartButtonNavigateEvent(
       HomeCartButtonNavigateEvent event, Emitter<HomeState> emit) async {
-    final supabase = Supabase.instance.client;
     if (supabase.auth.currentUser == null) {
       emit(HomeNavigateToLoginScreenActionState());
     } else {
