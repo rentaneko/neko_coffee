@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:neko_coffee/features/auth/bloc/index.dart';
-import 'package:neko_coffee/features/auth/views/login_screen.dart';
-import 'package:neko_coffee/features/auth/views/signup_screen.dart';
-import 'package:neko_coffee/features/cart/bloc/index.dart';
-import 'package:neko_coffee/features/home/bloc/index.dart';
+import 'package:neko_coffee/features/home/home_bloc.dart';
+import 'package:neko_coffee/features/home/home_state.dart';
+import 'package:neko_coffee/presentation/home/home.screen.dart';
 import 'package:neko_coffee/routes/app_router.dart';
 
 class AppPages {
@@ -15,34 +13,9 @@ class AppPages {
   static List<PageEntity> routes() {
     return [
       PageEntity(
-        path: SPLASH_ROUTE,
-        page: const AuthScreen(),
-        bloc:
-            BlocProvider(create: (_) => AuthBloc(const InitializedAuthState())),
-      ),
-      PageEntity(
         path: HOME_ROUTE,
         page: const HomeScreen(),
-        bloc:
-            BlocProvider(create: (_) => HomeBloc(const HomeInitializedState())),
-      ),
-      PageEntity(
-        path: LOGIN_ROUTE,
-        page: const LoginScreen(),
-        bloc:
-            BlocProvider(create: (_) => AuthBloc(const InitializedAuthState())),
-      ),
-      PageEntity(
-        path: SIGNUP_ROUTE,
-        page: const SignUpScreen(),
-        bloc:
-            BlocProvider(create: (_) => AuthBloc(const InitializedAuthState())),
-      ),
-      PageEntity(
-        path: CART_ROUTE,
-        page: const CartScreen(),
-        bloc:
-            BlocProvider(create: (_) => AuthBloc(const InitializedAuthState())),
+        bloc: BlocProvider(create: (_) => HomeBloc(InitialHomeState())),
       ),
     ];
   }
@@ -64,7 +37,7 @@ class AppPages {
       }
     }
     return MaterialPageRoute(
-        builder: (_) => const AuthScreen(), settings: settings);
+        builder: (_) => const HomeScreen(), settings: settings);
   }
 }
 

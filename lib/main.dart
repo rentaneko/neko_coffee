@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:neko_coffee/features/auth/views/auth_screen.dart';
 import 'package:neko_coffee/routes/app_page.dart';
 import 'package:neko_coffee/routes/app_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -33,12 +32,14 @@ class MyApp extends StatelessWidget {
       providers: [...AppPages.blocer(context)],
       child: ScreenUtilInit(
         designSize: const Size(393, 852),
-        builder: (context, child) => MaterialApp(
-          debugShowCheckedModeBanner: false,
-          theme: ThemeData(primaryColor: Colors.teal),
-          navigatorObservers: [AppPages.observer],
-          initialRoute: SPLASH_ROUTE,
-          onGenerateRoute: AppPages.generateRouteSettings,
+        builder: (context, child) => SafeArea(
+          child: MaterialApp(
+            debugShowCheckedModeBanner: false,
+            theme: ThemeData(primaryColor: Colors.teal),
+            navigatorObservers: [AppPages.observer],
+            initialRoute: SPLASH_ROUTE,
+            onGenerateRoute: AppPages.generateRouteSettings,
+          ),
         ),
       ),
     );
