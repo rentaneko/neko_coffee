@@ -35,3 +35,9 @@ class ErrorHomeState extends HomeState {
   @override
   String toString() => 'ErrorHomeState';
 }
+
+class HomeMenuClickedState extends HomeActionState {
+  final List<ProductModel> products;
+
+  HomeMenuClickedState({required this.products});
+}

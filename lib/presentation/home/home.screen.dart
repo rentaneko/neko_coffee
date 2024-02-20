@@ -30,19 +30,56 @@ class _HomeScreenState extends State<HomeScreen> {
       bloc: homeBloc,
       listenWhen: (previous, current) => current is HomeActionState,
       buildWhen: (previous, current) => current is! HomeActionState,
-      listener: (context, state) {},
+      listener: (context, state) {
+        if (state is LoadingHomeState) {}
+      },
       builder: (context, state) {
         switch (state.runtimeType) {
           case ErrorHomeState:
             return FailurePage(error: (state as ErrorHomeState).errorMessage);
 
           case UnAuthenticatedHomeState:
-            return HomeWidget.unAuthenticatedScreen(
-                context: context, state: state as UnAuthenticatedHomeState);
+            state as UnAuthenticatedHomeState;
+            return Scaffold(
+              appBar: AppBar(title: Text('Home UnAu')),
+              drawer: HomeWidget.drawer(context, state.cates, homeBloc),
+              body: HomeWidget.unAuthenticatedScreen(products: state.products),
+            );
 
           case AuthenticatedHomeState:
-            return HomeWidget.authenticatedScreen(
-                context: context, state: state as AuthenticatedHomeState);
+            state as AuthenticatedHomeState;
+            return Scaffold(
+              appBar: AppBar(
+                title: Text('Home Au'),
+                actions: [
+                  IconButton(
+                    onPressed: () {},
+                    icon: const Icon(CupertinoIcons.cart),
+                  ),
+                ],
+              ),
+              drawer: HomeWidget.drawer(context, state.cates, homeBloc),
+              body: HomeWidget.authenticatedScreen(products: state.products),
+            );
+
+          case LoadingHomeState:
+            if (homeBloc.client.auth.currentUser != null) {
+              return Scaffold(
+                appBar: AppBar(
+                  title: Text('Home Au'),
+                  leading: const Icon(Icons.menu),
+                ),
+                body: const LoadingWidget(),
+              );
+            }
+
+            return Scaffold(
+              appBar: AppBar(
+                title: Text('Home UnAu'),
+                leading: const Icon(Icons.menu),
+              ),
+              body: const LoadingWidget(),
+            );
 
           default:
             return const LoadingPage();

@@ -1,60 +1,51 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:neko_coffee/features/home/home_state.dart';
+import 'package:neko_coffee/features/home/index.dart';
 import 'package:neko_coffee/models/category.model.dart';
 import 'package:neko_coffee/models/product.model.dart';
 
 class HomeWidget {
-  static Widget unAuthenticatedScreen({
-    required BuildContext context,
-    required UnAuthenticatedHomeState state,
-  }) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Home')),
-      drawer: drawer(context, state.cates),
-    );
-  }
-
-  static Widget authenticatedScreen({
-    required BuildContext context,
-    required AuthenticatedHomeState state,
-  }) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Home'),
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(CupertinoIcons.heart),
-          ),
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(CupertinoIcons.cart),
-          ),
-        ],
-      ),
-      drawer: drawer(context, state.cates),
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 12.w),
-        child: GridView.builder(
-          shrinkWrap: true,
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            crossAxisSpacing: 12.w,
-            childAspectRatio: 3 / 4,
-            mainAxisSpacing: 16.h,
-          ),
-          itemCount: state.products.length,
-          itemBuilder: (BuildContext context, int index) {
-            return productCart(product: state.products[index]);
-          },
+  static Widget unAuthenticatedScreen({required List<ProductModel> products}) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 12.w),
+      child: GridView.builder(
+        shrinkWrap: true,
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          crossAxisSpacing: 12.w,
+          childAspectRatio: 3 / 4,
+          mainAxisSpacing: 16.h,
         ),
+        itemCount: products.length,
+        itemBuilder: (BuildContext context, int index) {
+          return productCart(product: products[index]);
+        },
       ),
     );
   }
 
-  static Widget drawer(BuildContext context, List<CategoryModel> cates) {
+  static Widget authenticatedScreen({required List<ProductModel> products}) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 12.w),
+      child: GridView.builder(
+        shrinkWrap: true,
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          crossAxisSpacing: 12.w,
+          childAspectRatio: 3 / 4,
+          mainAxisSpacing: 16.h,
+        ),
+        itemCount: products.length,
+        itemBuilder: (BuildContext context, int index) {
+          return productCart(product: products[index]);
+        },
+      ),
+    );
+  }
+
+  static Widget drawer(
+      BuildContext context, List<CategoryModel> cates, HomeBloc homeBloc) {
     return Drawer(
       backgroundColor: Colors.white,
       elevation: 1,
@@ -64,6 +55,13 @@ class HomeWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Center(child: Text('MENU')),
+            ListTile(
+              leading: Text('All'),
+              onTap: () {
+                homeBloc.add(HomeMenuClickedEvent(cates, idCate: 'All'));
+                Navigator.of(context).pop();
+              },
+            ),
             ListView.builder(
               itemCount: cates.length,
               shrinkWrap: true,
@@ -71,6 +69,11 @@ class HomeWidget {
               itemBuilder: (BuildContext context, int index) {
                 return ListTile(
                   leading: Text('${cates[index].name}'),
+                  onTap: () {
+                    homeBloc.add(
+                        HomeMenuClickedEvent(cates, idCate: cates[index].id!));
+                    Navigator.of(context).pop();
+                  },
                 );
               },
             ),
@@ -99,30 +102,29 @@ class HomeWidget {
               borderRadius: BorderRadius.circular(4),
               child: Image.network(
                 '${product.imgUrl}',
-                height: 145.h,
+                height: 150.h,
                 width: double.infinity,
-                fit: BoxFit.cover,
+                fit: BoxFit.contain,
               ),
             ),
           ),
-          Expanded(
-            child: ListTile(
-              minLeadingWidth: 0,
-              horizontalTitleGap: 0,
-              contentPadding: EdgeInsets.symmetric(horizontal: 8.w),
-              minVerticalPadding: 0,
-              title: Text(
-                '${product.name}',
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w600),
-                textAlign: TextAlign.start,
-              ),
-              subtitle: Text(
-                '${product.desc}',
-                overflow: TextOverflow.ellipsis,
-                maxLines: 2,
-                style: TextStyle(fontSize: 12.sp),
-              ),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 8.w),
+            child: Text(
+              '${product.name}',
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w600),
+              textAlign: TextAlign.start,
+            ),
+          ),
+          SizedBox(height: 8.h),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 8.w),
+            child: Text(
+              '${product.desc}',
+              overflow: TextOverflow.ellipsis,
+              maxLines: 2,
+              style: TextStyle(fontSize: 12.sp),
             ),
           ),
           SizedBox(height: 16.h),
