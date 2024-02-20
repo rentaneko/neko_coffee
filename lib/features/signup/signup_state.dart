@@ -18,4 +18,6 @@ class ErrorInputPasswordSignUpState extends SignUpState {
 
 class SuccessSignUpState extends SignUpState {}
 
+class ErrorSignUpState extends SignUpState {}
+
 class InitialSignUpState extends SignUpState {}
