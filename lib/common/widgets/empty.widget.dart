@@ -11,16 +11,16 @@ class EmptyWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Image.asset(
-            'assets/warning/empty-image.png',
-            height: 120,
-            width: 120,
+            'assets/images/empty-image.png',
+            height: 300.h,
+            width: 280.w,
           ),
-          SizedBox(height: 8.h),
+          SizedBox(height: 12.h),
           Text(
             desciption ?? 'Không có dữ liệu',
             style: TextStyle(
                 fontWeight: FontWeight.w500,
-                fontSize: 14,
+                fontSize: 28.sp,
                 color: Colors.grey.shade400),
           )
         ],

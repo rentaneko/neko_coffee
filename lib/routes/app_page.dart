@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:neko_coffee/features/app/index.dart';
 import 'package:neko_coffee/features/home/home_bloc.dart';
 import 'package:neko_coffee/features/home/home_state.dart';
 import 'package:neko_coffee/features/login/index.dart';
@@ -28,6 +29,11 @@ class AppPages {
         path: SIGNUP_ROUTE,
         page: const SignUpScreen(),
         bloc: BlocProvider(create: (_) => SignUpBloc(InitialSignUpState())),
+      ),
+      PageEntity(
+        path: APP_ROUTE,
+        page: const AppScreen(),
+        bloc: BlocProvider(create: (_) => AppBloc(InitialAppState())),
       ),
     ];
   }

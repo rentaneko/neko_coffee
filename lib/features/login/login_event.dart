@@ -18,3 +18,10 @@ class InputPasswordEvent extends LoginEvent {
 }
 
 class InitialLoginEvent extends LoginEvent {}
+
+class LoginButtonClickedEvent extends LoginActionEvent {
+  final String email;
+  final String password;
+
+  LoginButtonClickedEvent({required this.email, required this.password});
+}

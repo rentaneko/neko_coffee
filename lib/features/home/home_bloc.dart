@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:neko_coffee/features/home/index.dart';
 import 'package:neko_coffee/models/cart.model.dart';
-import 'package:neko_coffee/models/category.model.dart';
 import 'package:neko_coffee/models/product.model.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -18,7 +17,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       InitialHomeEvent event, Emitter<HomeState> emit) async {
     emit(LoadingHomeState());
     List<ProductModel> products = [];
-    List<CategoryModel> cates = [];
+
     await client
         .from('Product')
         .select()
@@ -29,12 +28,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
               products = value.map((e) => ProductModel.fromJson(e)).toList(),
         );
 
-    await client.from('Category').select().eq('is_active', true).then(
-          (value) =>
-              cates = value.map((e) => CategoryModel.fromJson(e)).toList(),
-        );
     if (client.auth.currentUser == null) {
-      emit(UnAuthenticatedHomeState(products: products, cates: cates));
+      emit(UnAuthenticatedHomeState(products: products));
     } else {
       List<CartModel> cart = [];
       await client
@@ -44,8 +39,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
           .then(
             (value) => cart = value.map((e) => CartModel.fromJson(e)).toList(),
           );
-      emit(
-          AuthenticatedHomeState(products: products, cates: cates, cart: cart));
+      emit(AuthenticatedHomeState(products: products, cart: cart));
     }
   }
 
@@ -78,7 +72,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     }
 
     if (client.auth.currentUser == null) {
-      emit(UnAuthenticatedHomeState(products: products, cates: event.cates));
+      emit(UnAuthenticatedHomeState(products: products));
     } else {
       List<CartModel> cart = [];
       await client
@@ -88,8 +82,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
           .then(
             (value) => cart = value.map((e) => CartModel.fromJson(e)).toList(),
           );
-      emit(AuthenticatedHomeState(
-          products: products, cates: event.cates, cart: cart));
+      emit(AuthenticatedHomeState(products: products, cart: cart));
     }
   }
 }

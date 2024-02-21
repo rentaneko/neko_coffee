@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             theme: ThemeData(primaryColor: Colors.teal),
             navigatorObservers: [AppPages.observer],
-            initialRoute: LOGIN_ROUTE,
+            initialRoute: APP_ROUTE,
             onGenerateRoute: AppPages.generateRouteSettings,
           ),
         ),

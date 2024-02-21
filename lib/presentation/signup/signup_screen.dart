@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:neko_coffee/common/widgets/dialog.widget.dart';
 import 'package:neko_coffee/features/signup/index.dart';
 import 'package:neko_coffee/features/signup/signup_event.dart';
+import 'package:neko_coffee/routes/app_router.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -33,8 +34,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
           setState(() => errorPassword = state.errorMsg);
         }
         if (state is SuccessSignUpState) {
-          Navigator.of(context).pop();
-          Navigator.of(context).pop();
+          Navigator.of(context).popUntil(ModalRoute.withName(LOGIN_ROUTE));
+          // Navigator.of(context).pop();
           showSuccessDialog(context, title: 'Sign Up Successfull');
         }
 

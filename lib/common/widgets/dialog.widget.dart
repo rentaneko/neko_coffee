@@ -215,3 +215,73 @@ Future<void> showLoadingDialog(BuildContext context) async {
     },
   );
 }
+
+Future<void> showErrorDialog(
+  BuildContext context, {
+  required String title,
+}) async {
+  await showGeneralDialog(
+    context: context,
+    barrierLabel: 'Barrier',
+    barrierDismissible: true,
+    barrierColor: Colors.black.withOpacity(0.5),
+    transitionDuration: const Duration(milliseconds: 300),
+    pageBuilder: (context, __, ___) {
+      return Dialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        child: Container(
+          width: double.infinity,
+          height: 120.h,
+          padding: EdgeInsets.all(20.h),
+          margin: EdgeInsets.only(top: 20.h),
+          decoration: BoxDecoration(
+            color: Colors.red,
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Text(
+                title,
+                style: TextStyle(fontSize: 16.sp, color: Colors.white),
+              ),
+              SizedBox(height: 16.h),
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: const Text('Try again'),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    },
+    transitionBuilder: (_, anim, __, child) {
+      Tween<Offset> tween;
+      if (anim.status == AnimationStatus.reverse) {
+        tween = Tween(
+          begin: const Offset(0, 0),
+          end: Offset.zero,
+        );
+      } else {
+        tween = Tween(
+          begin: const Offset(0, 1),
+          end: Offset.zero,
+        );
+      }
+
+      return SlideTransition(
+        position: tween.animate(anim),
+        child: FadeTransition(
+          opacity: anim,
+          child: child,
+        ),
+      );
+    },
+  );
+}

@@ -41,8 +41,10 @@ class _HomeScreenState extends State<HomeScreen> {
           case UnAuthenticatedHomeState:
             state as UnAuthenticatedHomeState;
             return Scaffold(
-              appBar: AppBar(title: Text('Home UnAu')),
-              drawer: HomeWidget.drawer(context, state.cates, homeBloc),
+              appBar: AppBar(
+                title: Text('Home UnAu'),
+                automaticallyImplyLeading: false,
+              ),
               body: HomeWidget.unAuthenticatedScreen(products: state.products),
             );
 
@@ -51,6 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
             return Scaffold(
               appBar: AppBar(
                 title: Text('Home Au'),
+                automaticallyImplyLeading: false,
                 actions: [
                   IconButton(
                     onPressed: () {},
@@ -58,7 +61,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ],
               ),
-              drawer: HomeWidget.drawer(context, state.cates, homeBloc),
               body: HomeWidget.authenticatedScreen(products: state.products),
             );
 

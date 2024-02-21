@@ -4,7 +4,11 @@ class InitialLoginState extends LoginState {}
 
 class LoadingLoginState extends LoginState {}
 
-class ErrorLoginState extends LoginState {}
+class ErrorLoginState extends LoginState {
+  final String errorMsg;
+
+  ErrorLoginState({required this.errorMsg});
+}
 
 class ErrorInputEmailState extends LoginState {
   final String? errorMsg;

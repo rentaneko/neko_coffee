@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:neko_coffee/features/signup/index.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';

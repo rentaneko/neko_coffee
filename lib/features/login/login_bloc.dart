@@ -13,6 +13,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     on<InputEmailEvent>(inputEmailEvent);
 
     on<InputPasswordEvent>(inputPasswordEvent);
+
+    on<LoginButtonClickedEvent>(loginButtonClickedEvent);
   }
 
   FutureOr<void> initialLoginEvent(
@@ -35,13 +37,25 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   FutureOr<void> inputPasswordEvent(
       InputPasswordEvent event, Emitter<LoginState> emit) {
-    if (event.password.length > 1 && event.password.length < 12) {
+    if (event.password.length > 1 && event.password.length < 6) {
       emit(ErrorInputPasswordState(
-          errorMsg: 'Password should be at least 12 chars'));
+          errorMsg: 'Password should be at least 6 chars'));
     } else if (event.password.length > 20) {
       emit(ErrorInputPasswordState(errorMsg: 'Password is too long'));
     } else {
       emit(ErrorInputPasswordState(errorMsg: null));
+    }
+  }
+
+  FutureOr<void> loginButtonClickedEvent(
+      LoginButtonClickedEvent event, Emitter<LoginState> emit) async {
+    emit(LoadingLoginState());
+    try {
+      await client.auth
+          .signInWithPassword(password: event.password, email: event.email);
+      emit(SuccessLoginState());
+    } catch (e) {
+      emit(ErrorLoginState(errorMsg: 'Invalid login credentials'));
     }
   }
 }

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:neko_coffee/common/widgets/dialog.widget.dart';
 import 'package:neko_coffee/features/login/index.dart';
-import 'package:neko_coffee/features/login/login_event.dart';
 import 'package:neko_coffee/routes/app_router.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -28,6 +28,12 @@ class _LoginScreenState extends State<LoginScreen> {
         }
         if (state is ErrorInputPasswordState) {
           setState(() => errorPassword = state.errorMsg);
+        }
+        if (state is ErrorLoginState) {
+          showErrorDialog(context, title: state.errorMsg);
+        }
+        if (state is SuccessLoginState) {
+          Navigator.pushReplacementNamed(context, HOME_ROUTE);
         }
       },
       child: Scaffold(
@@ -57,8 +63,15 @@ class _LoginScreenState extends State<LoginScreen> {
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                 ),
                 ElevatedButton(
-                  onPressed: () {
-                    if (formKey.currentState!.validate()) {}
+                  onPressed: () async {
+                    if (formKey.currentState!.validate()) {
+                      loginBloc.add(
+                        LoginButtonClickedEvent(
+                          email: emailCtrl.text.trim(),
+                          password: passCtrl.text.trim(),
+                        ),
+                      );
+                    }
                   },
                   child: Text('Login'),
                 ),
