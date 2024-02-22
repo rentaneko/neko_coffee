@@ -2,11 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:neko_coffee/features/home/bloc/index.dart';
-import 'package:neko_coffee/models/category.model.dart';
 import 'package:neko_coffee/models/product.model.dart';
 
 class HomeWidget {
-  static Widget unAuthenticatedScreen({required List<ProductModel> products}) {
+  static Widget unAuthenticatedScreen(
+      {required List<ProductModel> products, required HomeBloc onPress}) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 12.w),
       child: GridView.builder(
@@ -19,13 +19,25 @@ class HomeWidget {
         ),
         itemCount: products.length,
         itemBuilder: (BuildContext context, int index) {
-          return productCart(product: products[index]);
+          return productCart(
+            product: products[index],
+            add: () => onPress.add(
+              AddToCartClickedHomeEvent(
+                  idProduct: products[index].id!, quantity: 1),
+            ),
+            minus: () => onPress.add(
+              AddToCartClickedHomeEvent(
+                  idProduct: products[index].id!, quantity: -1),
+            ),
+            quantityInCart: onPress.getQuantityInCartById(products[index].id!),
+          );
         },
       ),
     );
   }
 
-  static Widget authenticatedScreen({required List<ProductModel> products}) {
+  static Widget authenticatedScreen(
+      {required List<ProductModel> products, required HomeBloc onPress}) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 12.w),
       child: GridView.builder(
@@ -38,52 +50,29 @@ class HomeWidget {
         ),
         itemCount: products.length,
         itemBuilder: (BuildContext context, int index) {
-          return productCart(product: products[index]);
+          return productCart(
+            product: products[index],
+            add: () => onPress.add(
+              AddToCartClickedHomeEvent(
+                  idProduct: products[index].id!, quantity: 1),
+            ),
+            minus: () => onPress.add(
+              AddToCartClickedHomeEvent(
+                  idProduct: products[index].id!, quantity: -1),
+            ),
+            quantityInCart: onPress.getQuantityInCartById(products[index].id!),
+          );
         },
       ),
     );
   }
 
-  static Widget drawer(
-      BuildContext context, List<CategoryModel> cates, HomeBloc homeBloc) {
-    return Drawer(
-      backgroundColor: Colors.white,
-      elevation: 1,
-      width: ScreenUtil.defaultSize.width / 2,
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Center(child: Text('MENU')),
-            ListTile(
-              leading: Text('All'),
-              onTap: () {
-                homeBloc.add(HomeMenuClickedEvent(cates, idCate: 'All'));
-                Navigator.of(context).pop();
-              },
-            ),
-            ListView.builder(
-              itemCount: cates.length,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemBuilder: (BuildContext context, int index) {
-                return ListTile(
-                  leading: Text('${cates[index].name}'),
-                  onTap: () {
-                    homeBloc.add(
-                        HomeMenuClickedEvent(cates, idCate: cates[index].id!));
-                    Navigator.of(context).pop();
-                  },
-                );
-              },
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  static Widget productCart({required ProductModel product}) {
+  static Widget productCart({
+    required ProductModel product,
+    required VoidCallback add,
+    required VoidCallback minus,
+    required int quantityInCart,
+  }) {
     return Container(
       decoration: BoxDecoration(
         borderRadius: const BorderRadius.only(
@@ -138,22 +127,60 @@ class HomeWidget {
               overflow: TextOverflow.ellipsis,
               style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w700),
             ),
-            trailing: IconButton(
-              onPressed: () {},
-              icon: Icon(
-                CupertinoIcons.cart_fill_badge_plus,
-                color: Colors.white,
-                size: 20.h,
-              ),
-              style: IconButton.styleFrom(
-                backgroundColor: const Color(0xffC68017),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-            ),
           ),
+          quantityInCart == 0
+              ? addToCartButton(add)
+              : Row(
+                  children: [
+                    Expanded(
+                      flex: 1,
+                      child: IconButton(
+                        onPressed: minus,
+                        icon: Icon(CupertinoIcons.minus_circle),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 2,
+                      child: Text(
+                        '$quantityInCart',
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: IconButton(
+                        onPressed: add,
+                        icon: Icon(CupertinoIcons.add_circled),
+                      ),
+                    ),
+                  ],
+                ),
         ],
+      ),
+    );
+  }
+
+  static Widget addToCartButton(VoidCallback onPress) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 8.w),
+      child: ElevatedButton.icon(
+        onPressed: onPress,
+        icon: Icon(
+          CupertinoIcons.cart_fill_badge_plus,
+          color: Colors.white,
+          size: 20.h,
+        ),
+        label: const Text(
+          'Add To Cart',
+          style: TextStyle(color: Colors.white),
+        ),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: const Color(0xffC68017),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(4),
+          ),
+          minimumSize: Size(double.infinity, 36.h),
+        ),
       ),
     );
   }

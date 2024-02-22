@@ -32,8 +32,6 @@ class ErrorHomeState extends HomeState {
   String toString() => 'ErrorHomeState';
 }
 
-class HomeMenuClickedState extends HomeActionState {
-  final List<ProductModel> products;
+class AddToCartClickedHomeState extends HomeActionState {}
 
-  HomeMenuClickedState({required this.products});
-}
+class SuccessAddToCartHomeState extends HomeActionState {}

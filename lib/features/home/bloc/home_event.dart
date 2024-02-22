@@ -12,3 +12,14 @@ class HomeMenuClickedEvent extends HomeEvent {
 
   HomeMenuClickedEvent(this.cates, {required this.idCate});
 }
+
+class AddToCartClickedHomeEvent extends HomeEvent {
+  final String idProduct;
+  final int quantity;
+
+  AddToCartClickedHomeEvent({required this.idProduct, required this.quantity});
+}
+
+class UpdateItemInCartHomeEvent extends HomeEvent {}
+
+class LoadingItemInCartHomeEvent extends HomeEvent {}

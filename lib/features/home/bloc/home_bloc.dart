@@ -7,16 +7,21 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final client = Supabase.instance.client;
+  List<CartModel> cart = [];
+  List<ProductModel> products = [];
   HomeBloc(HomeState initialState) : super(initialState) {
     on<InitialHomeEvent>(initialHomeEvent);
 
     on<HomeMenuClickedEvent>(homeMenuClickedEvent);
+
+    on<AddToCartClickedHomeEvent>(addToCartClickedHomeEvent);
+
+    // on<GetItemCartHomeEvent>(getItemCartHomeEvent);
   }
 
   FutureOr<void> initialHomeEvent(
       InitialHomeEvent event, Emitter<HomeState> emit) async {
     emit(LoadingHomeState());
-    List<ProductModel> products = [];
 
     await client
         .from('Product')
@@ -31,13 +36,14 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     if (client.auth.currentUser == null) {
       emit(UnAuthenticatedHomeState(products: products));
     } else {
-      List<CartModel> cart = [];
       await client
           .from('Cart')
           .select('*, Product(*)')
           .eq('id_user', client.auth.currentUser!.id)
           .then(
-            (value) => cart = value.map((e) => CartModel.fromJson(e)).toList(),
+            (value) => {
+              cart = value.map((e) => CartModel.fromJson(e)).toList(),
+            },
           );
       emit(AuthenticatedHomeState(products: products, cart: cart));
     }
@@ -84,5 +90,44 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
           );
       emit(AuthenticatedHomeState(products: products, cart: cart));
     }
+  }
+
+  FutureOr<void> addToCartClickedHomeEvent(
+      AddToCartClickedHomeEvent event, Emitter<HomeState> emit) async {
+    emit(AddToCartClickedHomeState());
+    try {
+      await client.from('Cart').upsert(
+        {
+          'id_product': event.idProduct,
+          'id_user': client.auth.currentUser!.id,
+          'quantity': getQuantityInCartById(event.idProduct) + event.quantity,
+        },
+
+        // cant be update if duplicate primary key
+        // ignoreDuplicates: true,
+      );
+      await client
+          .from('Cart')
+          .select('*, Product(*)')
+          .eq('id_user', client.auth.currentUser!.id)
+          .then(
+            (value) => {
+              cart = value.map((e) => CartModel.fromJson(e)).toList(),
+            },
+          );
+      emit(AuthenticatedHomeState(products: products, cart: cart));
+      emit(SuccessAddToCartHomeState());
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  int getQuantityInCartById(String id) {
+    for (var item in cart) {
+      if (item.idProduct == id) {
+        return item.quantity!;
+      }
+    }
+    return 0;
   }
 }
