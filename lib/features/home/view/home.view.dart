@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:neko_coffee/common/widgets/failure.widget.dart';
 import 'package:neko_coffee/common/widgets/loading.widget.dart';
-import 'package:neko_coffee/features/home/home_bloc.dart';
-import 'package:neko_coffee/features/home/home_event.dart';
-import 'package:neko_coffee/features/home/home_state.dart';
-import 'package:neko_coffee/presentation/home/home.widget.dart';
+import 'package:neko_coffee/features/home/bloc/home_bloc.dart';
+import 'package:neko_coffee/features/home/bloc/home_event.dart';
+import 'package:neko_coffee/features/home/bloc/home_state.dart';
+import 'package:neko_coffee/features/home/view/home.widget.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});

@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:neko_coffee/features/category/category_state.dart';
-import 'package:neko_coffee/features/category/index.dart';
+import 'package:neko_coffee/features/category/bloc/category_state.dart';
+import 'package:neko_coffee/features/category/bloc/index.dart';
 import 'package:neko_coffee/models/category.model.dart';
 import 'package:neko_coffee/models/sub_category.model.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';

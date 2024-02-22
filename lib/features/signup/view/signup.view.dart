@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:neko_coffee/common/widgets/dialog.widget.dart';
-import 'package:neko_coffee/features/signup/index.dart';
-import 'package:neko_coffee/features/signup/signup_event.dart';
+import 'package:neko_coffee/features/signup/bloc/index.dart';
+import 'package:neko_coffee/features/signup/bloc/signup_event.dart';
 import 'package:neko_coffee/routes/app_router.dart';
 
 class SignUpScreen extends StatefulWidget {

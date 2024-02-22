@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:neko_coffee/common/widgets/empty.widget.dart';
 import 'package:neko_coffee/common/widgets/failure.widget.dart';
 import 'package:neko_coffee/common/widgets/loading.widget.dart';
-import 'package:neko_coffee/features/category/index.dart';
+import 'package:neko_coffee/features/category/bloc/index.dart';
 
 class CategoryScreen extends StatefulWidget {
   const CategoryScreen({super.key});

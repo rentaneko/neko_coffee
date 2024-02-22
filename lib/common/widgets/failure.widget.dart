@@ -20,7 +20,7 @@ class FailurePage extends StatelessWidget {
         alignment: Alignment.topCenter,
         child: FailureContent(
           description: error,
-          image: 'assets/warning/network.svg',
+          image: 'assets/svg/network.svg',
           onPressed: onPressed,
         ),
       ),
@@ -46,7 +46,7 @@ class FailureWidget extends StatelessWidget {
       alignment: Alignment.topCenter,
       child: FailureContent(
         description: error,
-        image: 'assets/warning/network.svg',
+        image: 'assets/svg/network.svg',
         onPressed: onPressed,
       ),
     );

@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:neko_coffee/features/app/index.dart';
-import 'package:neko_coffee/features/category/index.dart';
-import 'package:neko_coffee/features/favorite/index.dart';
-import 'package:neko_coffee/features/login/index.dart';
-import 'package:neko_coffee/features/signup/index.dart';
-import 'package:neko_coffee/presentation/home/home.screen.dart';
+import 'package:neko_coffee/features/account/bloc/index.dart';
+import 'package:neko_coffee/features/app/bloc/index.dart';
+import 'package:neko_coffee/features/category/bloc/index.dart';
+import 'package:neko_coffee/features/favorite/bloc/index.dart';
+import 'package:neko_coffee/features/home/view/home.view.dart';
 
 class AppScreen extends StatefulWidget {
   const AppScreen({super.key});
@@ -34,7 +33,7 @@ class _AppScreenState extends State<AppScreen> {
               HomeScreen(),
               CategoryScreen(),
               FavoriteScreen(),
-              SignUpScreen(),
+              AccountScreen(),
             ],
           ),
           bottomNavigationBar: BottomNavigationBar(

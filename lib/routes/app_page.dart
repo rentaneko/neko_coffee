@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:neko_coffee/features/app/index.dart';
-import 'package:neko_coffee/features/home/home_bloc.dart';
-import 'package:neko_coffee/features/home/home_state.dart';
-import 'package:neko_coffee/features/login/index.dart';
-import 'package:neko_coffee/features/signup/index.dart';
-import 'package:neko_coffee/presentation/home/home.screen.dart';
+import 'package:neko_coffee/features/account/bloc/account_state.dart';
+import 'package:neko_coffee/features/account/bloc/index.dart';
+import 'package:neko_coffee/features/app/bloc/index.dart';
+import 'package:neko_coffee/features/home/bloc/home_bloc.dart';
+import 'package:neko_coffee/features/home/bloc/home_state.dart';
+import 'package:neko_coffee/features/login/bloc/index.dart';
+import 'package:neko_coffee/features/signup/bloc/index.dart';
+import 'package:neko_coffee/features/home/view/home.view.dart';
 import 'package:neko_coffee/routes/app_router.dart';
 
 class AppPages {
@@ -34,6 +36,11 @@ class AppPages {
         path: APP_ROUTE,
         page: const AppScreen(),
         bloc: BlocProvider(create: (_) => AppBloc(InitialAppState())),
+      ),
+      PageEntity(
+        path: ACCOUNT_ROUTE,
+        page: const AccountScreen(),
+        bloc: BlocProvider(create: (_) => AccountBloc(InitialAccountState())),
       ),
     ];
   }

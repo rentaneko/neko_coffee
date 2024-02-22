@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:neko_coffee/common/widgets/dialog.widget.dart';
-import 'package:neko_coffee/features/login/index.dart';
+import 'package:neko_coffee/features/account/bloc/index.dart';
+import 'package:neko_coffee/features/login/bloc/index.dart';
 import 'package:neko_coffee/routes/app_router.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
-
+  const LoginScreen({super.key, this.newBloc});
+  final dynamic newBloc;
   @override
   State<LoginScreen> createState() => _LoginScreenState();
 }
@@ -33,7 +34,10 @@ class _LoginScreenState extends State<LoginScreen> {
           showErrorDialog(context, title: state.errorMsg);
         }
         if (state is SuccessLoginState) {
-          Navigator.pushReplacementNamed(context, HOME_ROUTE);
+          Navigator.of(context).pop();
+          if (widget.newBloc is AccountBloc) {
+            widget.newBloc.add(InitialAccountEvent());
+          }
         }
       },
       child: Scaffold(

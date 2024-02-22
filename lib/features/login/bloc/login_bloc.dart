@@ -1,14 +1,12 @@
 import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:neko_coffee/contants/value.contant.dart';
-import 'package:neko_coffee/features/login/index.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:neko_coffee/features/login/bloc/index.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final client = Supabase.instance.client;
   LoginBloc(LoginState initialState) : super(initialState) {
-    // on<InitialLoginEvent>(initialLoginEvent);
+    on<InitialLoginEvent>(initialLoginEvent);
 
     on<InputEmailEvent>(inputEmailEvent);
 
@@ -18,11 +16,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   }
 
   FutureOr<void> initialLoginEvent(
-      InitialLoginEvent event, Emitter<LoginState> emit) async {
-    final _pref = await SharedPreferences.getInstance();
-    if (_pref.getString(IS_LOGIN) != null) {
-    } else {}
-  }
+      InitialLoginEvent event, Emitter<LoginState> emit) async {}
 
   FutureOr<void> inputEmailEvent(
       InputEmailEvent event, Emitter<LoginState> emit) {

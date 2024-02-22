@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:neko_coffee/features/home/index.dart';
+import 'package:neko_coffee/features/home/bloc/index.dart';
 import 'package:neko_coffee/models/category.model.dart';
 import 'package:neko_coffee/models/product.model.dart';
 

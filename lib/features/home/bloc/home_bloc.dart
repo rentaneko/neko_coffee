@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:neko_coffee/features/home/index.dart';
+import 'package:neko_coffee/features/home/bloc/index.dart';
 import 'package:neko_coffee/models/cart.model.dart';
 import 'package:neko_coffee/models/product.model.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
