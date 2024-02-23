@@ -35,3 +35,5 @@ class ErrorHomeState extends HomeState {
 class AddToCartClickedHomeState extends HomeActionState {}
 
 class SuccessAddToCartHomeState extends HomeActionState {}
+
+class HomeNavigateToCartActionState extends HomeActionState {}

@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:neko_coffee/common/widgets/dialog.widget.dart';
 import 'package:neko_coffee/common/widgets/failure.widget.dart';
 import 'package:neko_coffee/common/widgets/loading.widget.dart';
+import 'package:neko_coffee/features/cart/bloc/index.dart';
 import 'package:neko_coffee/features/home/bloc/home_bloc.dart';
 import 'package:neko_coffee/features/home/bloc/home_event.dart';
 import 'package:neko_coffee/features/home/bloc/home_state.dart';
@@ -41,6 +42,10 @@ class _HomeScreenState extends State<HomeScreen> {
         if (state is SuccessAddToCartHomeState) {
           Navigator.of(context).pop();
         }
+        if (state is HomeNavigateToCartActionState) {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (_) => CartScreen(homeBloc: homeBloc)));
+        }
       },
       builder: (context, state) {
         switch (state.runtimeType) {
@@ -65,12 +70,15 @@ class _HomeScreenState extends State<HomeScreen> {
                 title: Text('Home Au'),
                 automaticallyImplyLeading: false,
                 actions: [
-                  Badge(
-                    label: Text('${state.cart.length}'),
-                    isLabelVisible: state.cart == [] ? false : true,
-                    alignment: Alignment.bottomRight,
-                    offset: const Offset(5, 4),
-                    child: const Icon(CupertinoIcons.shopping_cart),
+                  InkWell(
+                    onTap: () => homeBloc.add(HomeCartButtonClickedEvent()),
+                    child: Badge(
+                      label: Text('${state.cart.length}'),
+                      isLabelVisible: state.cart == [] ? false : true,
+                      alignment: Alignment.bottomRight,
+                      offset: const Offset(5, 4),
+                      child: const Icon(CupertinoIcons.shopping_cart),
+                    ),
                   ),
                   SizedBox(width: 20.w),
                 ],

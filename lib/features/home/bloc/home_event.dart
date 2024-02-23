@@ -20,6 +20,4 @@ class AddToCartClickedHomeEvent extends HomeEvent {
   AddToCartClickedHomeEvent({required this.idProduct, required this.quantity});
 }
 
-class UpdateItemInCartHomeEvent extends HomeEvent {}
-
-class LoadingItemInCartHomeEvent extends HomeEvent {}
+class HomeCartButtonClickedEvent extends HomeEvent {}

@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:neko_coffee/features/account/bloc/account_state.dart';
 import 'package:neko_coffee/features/account/bloc/index.dart';
 import 'package:neko_coffee/features/app/bloc/index.dart';
+import 'package:neko_coffee/features/cart/bloc/cart_state.dart';
+import 'package:neko_coffee/features/cart/bloc/index.dart';
 import 'package:neko_coffee/features/home/bloc/home_bloc.dart';
 import 'package:neko_coffee/features/home/bloc/home_state.dart';
 import 'package:neko_coffee/features/login/bloc/index.dart';
@@ -41,6 +43,11 @@ class AppPages {
         path: ACCOUNT_ROUTE,
         page: const AccountScreen(),
         bloc: BlocProvider(create: (_) => AccountBloc(InitialAccountState())),
+      ),
+      PageEntity(
+        path: CART_ROUTE,
+        page: const CartScreen(),
+        bloc: BlocProvider(create: (_) => CartBloc(InitialCartState())),
       ),
     ];
   }

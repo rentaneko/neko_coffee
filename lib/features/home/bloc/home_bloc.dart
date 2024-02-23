@@ -16,7 +16,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
     on<AddToCartClickedHomeEvent>(addToCartClickedHomeEvent);
 
-    // on<GetItemCartHomeEvent>(getItemCartHomeEvent);
+    on<HomeCartButtonClickedEvent>(homeCartButtonClickedEvent);
   }
 
   FutureOr<void> initialHomeEvent(
@@ -40,6 +40,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
           .from('Cart')
           .select('*, Product(*)')
           .eq('id_user', client.auth.currentUser!.id)
+          .order('Product(name)', ascending: true)
           .then(
             (value) => {
               cart = value.map((e) => CartModel.fromJson(e)).toList(),
@@ -85,6 +86,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
           .from('Cart')
           .select('*, Product(*)')
           .eq('id_user', client.auth.currentUser!.id)
+          .order('Product(name)', ascending: true)
           .then(
             (value) => cart = value.map((e) => CartModel.fromJson(e)).toList(),
           );
@@ -96,20 +98,26 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       AddToCartClickedHomeEvent event, Emitter<HomeState> emit) async {
     emit(AddToCartClickedHomeState());
     try {
-      await client.from('Cart').upsert(
-        {
-          'id_product': event.idProduct,
-          'id_user': client.auth.currentUser!.id,
-          'quantity': getQuantityInCartById(event.idProduct) + event.quantity,
-        },
+      if (getQuantityInCartById(event.idProduct) == 1 && event.quantity == -1) {
+        await client.from('Cart').delete().eq('id_product', event.idProduct);
+      } else {
+        await client.from('Cart').upsert(
+          {
+            'id_product': event.idProduct,
+            'id_user': client.auth.currentUser!.id,
+            'quantity': getQuantityInCartById(event.idProduct) + event.quantity,
+          },
 
-        // cant be update if duplicate primary key
-        // ignoreDuplicates: true,
-      );
+          // cant be update if duplicate primary key
+          // ignoreDuplicates: true,
+        );
+      }
+
       await client
           .from('Cart')
           .select('*, Product(*)')
           .eq('id_user', client.auth.currentUser!.id)
+          .order('Product(name)', ascending: true)
           .then(
             (value) => {
               cart = value.map((e) => CartModel.fromJson(e)).toList(),
@@ -129,5 +137,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       }
     }
     return 0;
+  }
+
+  FutureOr<void> homeCartButtonClickedEvent(
+      HomeCartButtonClickedEvent event, Emitter<HomeState> emit) {
+    emit(HomeNavigateToCartActionState());
   }
 }

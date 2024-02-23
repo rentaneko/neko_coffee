@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:neko_coffee/models/cart.model.dart';
+import 'package:neko_coffee/features/home/bloc/home_bloc.dart';
 
 @immutable
 abstract class CartEvent {}
 
 class InitialCartEvent extends CartEvent {}
 
-class GetItemInCart extends CartEvent {
-  final List<CartModel> cart;
+class UpdateQuantityItemCartEvent extends CartEvent {
+  final String idProduct;
+  final int quantity;
+  final HomeBloc homeBloc;
 
-  GetItemInCart({required this.cart});
+  UpdateQuantityItemCartEvent({
+    required this.idProduct,
+    required this.quantity,
+    required this.homeBloc,
+  });
 }
