@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 Future<void> showFlashDialog(
@@ -41,7 +40,7 @@ Future<void> showFlashDialog(
                   Expanded(
                     child: ElevatedButton(
                       onPressed: onPressed,
-                      child: Text(
+                      child: const Text(
                         'OK',
                         // style: mediumLato(infor01, 16.sp),
                       ),
@@ -51,7 +50,7 @@ Future<void> showFlashDialog(
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () => Navigator.pop(context),
-                      child: Text(
+                      child: const Text(
                         'Hủy bỏ',
                         // style: mediumLato(infor01, 16.sp),
                       ),
@@ -184,7 +183,7 @@ Future<void> showLoadingDialog(BuildContext context) async {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              Text('Loading...'),
+              const Text('Loading...'),
               SizedBox(height: 16.h),
             ],
           ),

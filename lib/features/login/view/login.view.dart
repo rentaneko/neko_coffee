@@ -47,8 +47,8 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Column(
               children: [
                 SizedBox(height: 250.h),
-                Text('LOGIN FORM'),
-                Text('Email/Phone'),
+                const Text('LOGIN FORM'),
+                const Text('Email/Phone'),
                 TextFormField(
                   controller: emailCtrl,
                   onChanged: (value) => loginBloc.add(
@@ -57,7 +57,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   validator: (value) => errorEmail,
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                 ),
-                Text('Password'),
+                const Text('Password'),
                 TextFormField(
                   controller: passCtrl,
                   validator: (value) => errorPassword,
@@ -77,11 +77,11 @@ class _LoginScreenState extends State<LoginScreen> {
                       );
                     }
                   },
-                  child: Text('Login'),
+                  child: const Text('Login'),
                 ),
                 ElevatedButton(
                   onPressed: () => Navigator.pushNamed(context, SIGNUP_ROUTE),
-                  child: Text('Sign Up'),
+                  child: const Text('Sign Up'),
                 ),
               ],
             ),

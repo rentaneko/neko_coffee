@@ -27,7 +27,6 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
             .single()
             .then((value) => {
                   user = CustomerModel.fromJson(value),
-                  print('${user.imgUrl}'),
                 });
         emit(SuccessAccountState(user: user));
       } catch (e) {

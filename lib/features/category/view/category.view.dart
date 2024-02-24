@@ -7,26 +7,25 @@ import 'package:neko_coffee/common/widgets/loading.widget.dart';
 import 'package:neko_coffee/features/category/bloc/index.dart';
 
 class CategoryScreen extends StatefulWidget {
-  const CategoryScreen({super.key});
-
+  const CategoryScreen({super.key, required this.categoryBloc});
+  final CategoryBloc categoryBloc;
   @override
   State<CategoryScreen> createState() => _CategoryScreenState();
 }
 
 class _CategoryScreenState extends State<CategoryScreen> {
-  final categoryBloc = CategoryBloc(InitialCategoryState());
   int selectedCate = 0;
 
   @override
   void initState() {
-    categoryBloc.add(InitialCategoryEvent());
+    widget.categoryBloc.add(InitialCategoryEvent());
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CategoryBloc, CategoryState>(
-      bloc: categoryBloc,
+      bloc: widget.categoryBloc,
       builder: (context, state) {
         switch (state.runtimeType) {
           case LoadingCategoryState():
@@ -46,7 +45,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                       return InkWell(
                         onTap: () {
                           setState(() => selectedCate = index);
-                          categoryBloc.add(
+                          widget.categoryBloc.add(
                             CategoryClickedEvent(
                                 idParent: state.cate[index].id!,
                                 cates: state.cate),

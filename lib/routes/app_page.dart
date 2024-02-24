@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:neko_coffee/features/account/bloc/account_state.dart';
 import 'package:neko_coffee/features/account/bloc/index.dart';
 import 'package:neko_coffee/features/app/bloc/index.dart';
-import 'package:neko_coffee/features/cart/bloc/cart_state.dart';
 import 'package:neko_coffee/features/cart/bloc/index.dart';
+import 'package:neko_coffee/features/favorite/bloc/favorite_bloc.dart';
+import 'package:neko_coffee/features/favorite/bloc/favorite_state.dart';
 import 'package:neko_coffee/features/home/bloc/home_bloc.dart';
 import 'package:neko_coffee/features/home/bloc/home_state.dart';
 import 'package:neko_coffee/features/login/bloc/index.dart';
 import 'package:neko_coffee/features/signup/bloc/index.dart';
-import 'package:neko_coffee/features/home/view/home.view.dart';
 import 'package:neko_coffee/routes/app_router.dart';
 
 class AppPages {
@@ -19,11 +18,6 @@ class AppPages {
 
   static List<PageEntity> routes() {
     return [
-      PageEntity(
-        path: HOME_ROUTE,
-        page: const HomeScreen(),
-        bloc: BlocProvider(create: (_) => HomeBloc(InitialHomeState())),
-      ),
       PageEntity(
         path: LOGIN_ROUTE,
         page: const LoginScreen(),
@@ -37,12 +31,16 @@ class AppPages {
       PageEntity(
         path: APP_ROUTE,
         page: const AppScreen(),
-        bloc: BlocProvider(create: (_) => AppBloc(InitialAppState())),
-      ),
-      PageEntity(
-        path: ACCOUNT_ROUTE,
-        page: const AccountScreen(),
-        bloc: BlocProvider(create: (_) => AccountBloc(InitialAccountState())),
+        bloc: MultiBlocProvider(
+          providers: [
+            BlocProvider(create: (_) => AppBloc(InitialAppState())),
+            BlocProvider(create: (_) => HomeBloc(InitialHomeState())),
+            BlocProvider(create: (_) => AccountBloc(InitialAccountState())),
+            BlocProvider(create: (_) => CartBloc(InitialCartState())),
+            BlocProvider(create: (_) => FavouriteBloc(FavouriteInitialState())),
+          ],
+          child: Container(),
+        ),
       ),
       PageEntity(
         path: CART_ROUTE,
@@ -69,7 +67,7 @@ class AppPages {
       }
     }
     return MaterialPageRoute(
-        builder: (_) => const HomeScreen(), settings: settings);
+        builder: (_) => const AppScreen(), settings: settings);
   }
 }
 

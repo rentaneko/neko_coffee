@@ -28,7 +28,7 @@ class NotLoggedWidget extends StatelessWidget {
           SizedBox(height: 12.h),
           ElevatedButton(
             onPressed: onPress,
-            child: Text('Go to Login'),
+            child: const Text('Go to Login'),
           ),
         ],
       ),

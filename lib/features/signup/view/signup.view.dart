@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:neko_coffee/common/widgets/dialog.widget.dart';
 import 'package:neko_coffee/features/signup/bloc/index.dart';
-import 'package:neko_coffee/features/signup/bloc/signup_event.dart';
 import 'package:neko_coffee/routes/app_router.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -53,8 +52,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
             child: Column(
               children: [
                 SizedBox(height: 250.h),
-                Text('Sign Up'),
-                Text('Email/Phone'),
+                const Text('Sign Up'),
+                const Text('Email/Phone'),
                 TextFormField(
                   controller: emailCtrl,
                   onChanged: (value) =>
@@ -62,7 +61,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   validator: (value) => errorEmail,
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                 ),
-                Text('Password'),
+                const Text('Password'),
                 TextFormField(
                   controller: passCtrl,
                   onChanged: (value) =>
@@ -79,7 +78,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ));
                     }
                   },
-                  child: Text('Sign Up'),
+                  child: const Text('Sign Up'),
                 ),
               ],
             ),

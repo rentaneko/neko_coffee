@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names
+
 const String SPLASH_ROUTE = '/';
 const String HOME_ROUTE = '/home';
 const String CART_ROUTE = '/cart';

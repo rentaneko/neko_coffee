@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:neko_coffee/features/home/bloc/index.dart';
 import 'package:neko_coffee/models/cart.model.dart';
+import 'package:neko_coffee/models/favourite.model.dart';
 import 'package:neko_coffee/models/product.model.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -9,6 +10,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final client = Supabase.instance.client;
   List<CartModel> cart = [];
   List<ProductModel> products = [];
+  List<FavouriteModel> favouriteList = [];
   HomeBloc(HomeState initialState) : super(initialState) {
     on<InitialHomeEvent>(initialHomeEvent);
 
@@ -17,6 +19,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<AddToCartClickedHomeEvent>(addToCartClickedHomeEvent);
 
     on<HomeCartButtonClickedEvent>(homeCartButtonClickedEvent);
+
+    on<FavouriteButtonClickedEvent>(favouriteButtonClickedEvent);
   }
 
   FutureOr<void> initialHomeEvent(
@@ -46,7 +50,19 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
               cart = value.map((e) => CartModel.fromJson(e)).toList(),
             },
           );
-      emit(AuthenticatedHomeState(products: products, cart: cart));
+
+      await client
+          .from('Favourite')
+          .select('*, Product(name, img_url, description)')
+          .order('Product(name)')
+          .then((value) => favouriteList =
+              value.map((e) => FavouriteModel.fromJson(e)).toList());
+
+      emit(AuthenticatedHomeState(
+        products: products,
+        cart: cart,
+        favourites: favouriteList,
+      ));
     }
   }
 
@@ -90,7 +106,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
           .then(
             (value) => cart = value.map((e) => CartModel.fromJson(e)).toList(),
           );
-      emit(AuthenticatedHomeState(products: products, cart: cart));
+      emit(AuthenticatedHomeState(
+          products: products, cart: cart, favourites: favouriteList));
     }
   }
 
@@ -123,10 +140,45 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
               cart = value.map((e) => CartModel.fromJson(e)).toList(),
             },
           );
-      emit(AuthenticatedHomeState(products: products, cart: cart));
+      emit(AuthenticatedHomeState(
+          products: products, cart: cart, favourites: favouriteList));
       emit(SuccessAddToCartHomeState());
     } catch (e) {
-      print(e);
+      // print(e);
+    }
+  }
+
+  FutureOr<void> homeCartButtonClickedEvent(
+      HomeCartButtonClickedEvent event, Emitter<HomeState> emit) {
+    emit(HomeNavigateToCartActionState());
+  }
+
+  FutureOr<void> favouriteButtonClickedEvent(
+      FavouriteButtonClickedEvent event, Emitter<HomeState> emit) async {
+    try {
+      if (isFavourite(event.idProduct)) {
+        await client
+            .from('Favourite')
+            .delete()
+            .eq('id_product', event.idProduct)
+            .eq('id_user', client.auth.currentUser!.id);
+      } else {
+        await client.from('Favourite').insert({
+          'id_product': event.idProduct,
+          'id_user': client.auth.currentUser!.id,
+        });
+      }
+
+      await client
+          .from('Favourite')
+          .select('*, Product(name, img_url, description)')
+          .order('Product(name)')
+          .then((value) => favouriteList =
+              value.map((e) => FavouriteModel.fromJson(e)).toList());
+      emit(AuthenticatedHomeState(
+          products: products, cart: cart, favourites: favouriteList));
+    } catch (e) {
+      emit(ErrorHomeState(e.toString()));
     }
   }
 
@@ -139,8 +191,12 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     return 0;
   }
 
-  FutureOr<void> homeCartButtonClickedEvent(
-      HomeCartButtonClickedEvent event, Emitter<HomeState> emit) {
-    emit(HomeNavigateToCartActionState());
+  bool isFavourite(String id) {
+    for (var item in favouriteList) {
+      if (item.idProduct == id) {
+        return true;
+      }
+    }
+    return false;
   }
 }

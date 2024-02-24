@@ -21,3 +21,9 @@ class AddToCartClickedHomeEvent extends HomeEvent {
 }
 
 class HomeCartButtonClickedEvent extends HomeEvent {}
+
+class FavouriteButtonClickedEvent extends HomeEvent {
+  final String idProduct;
+
+  FavouriteButtonClickedEvent({required this.idProduct});
+}

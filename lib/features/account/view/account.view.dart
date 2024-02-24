@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:neko_coffee/common/widgets/failure.widget.dart';
@@ -9,19 +8,17 @@ import 'package:neko_coffee/features/account/bloc/index.dart';
 import 'package:neko_coffee/features/login/bloc/index.dart';
 
 class AccountScreen extends StatefulWidget {
-  const AccountScreen({super.key});
-
+  const AccountScreen({super.key, required this.accountBloc});
+  final AccountBloc accountBloc;
   @override
   State<AccountScreen> createState() => _AccountScreenState();
 }
 
 class _AccountScreenState extends State<AccountScreen> {
-  final accountBloc = AccountBloc(InitialAccountState());
-
   @override
   void initState() {
     super.initState();
-    accountBloc.add(InitialAccountEvent());
+    widget.accountBloc.add(InitialAccountEvent());
   }
 
   @override
@@ -31,7 +28,7 @@ class _AccountScreenState extends State<AccountScreen> {
         listener: (context, state) {},
         listenWhen: (previous, current) => current is AccountActionState,
         buildWhen: (previous, current) => current is! AccountActionState,
-        bloc: accountBloc,
+        bloc: widget.accountBloc,
         builder: (context, state) {
           switch (state.runtimeType) {
             case SuccessAccountState:
@@ -63,7 +60,7 @@ class _AccountScreenState extends State<AccountScreen> {
                       style: TextStyle(fontSize: 12.sp),
                     ),
                     subtitle: Text(
-                      '${accountBloc.client.auth.currentUser!.email}',
+                      '${widget.accountBloc.client.auth.currentUser!.email}',
                       style: TextStyle(fontSize: 16.sp),
                     ),
                   ),
@@ -88,8 +85,9 @@ class _AccountScreenState extends State<AccountScreen> {
                     ),
                   ),
                   ListTile(
-                    title: Text('Logout'),
-                    onTap: () => accountBloc.add(LogoutButtonClickedEvent()),
+                    title: const Text('Logout'),
+                    onTap: () =>
+                        widget.accountBloc.add(LogoutButtonClickedEvent()),
                   ),
                 ],
               );
@@ -101,7 +99,8 @@ class _AccountScreenState extends State<AccountScreen> {
             case NotLoggedAccountState:
               return NotLoggedWidget(
                   onPress: () => Navigator.of(context).push(MaterialPageRoute(
-                      builder: (_) => LoginScreen(newBloc: accountBloc))));
+                      builder: (_) =>
+                          LoginScreen(newBloc: widget.accountBloc))));
 
             default:
               return const LoadingWidget();

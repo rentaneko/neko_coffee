@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:neko_coffee/features/favorite/bloc/index.dart';
 import 'package:neko_coffee/features/home/bloc/index.dart';
 import 'package:neko_coffee/models/product.model.dart';
 
@@ -30,6 +31,7 @@ class HomeWidget {
                   idProduct: products[index].id!, quantity: -1),
             ),
             quantityInCart: onPress.getQuantityInCartById(products[index].id!),
+            homeBloc: onPress,
           );
         },
       ),
@@ -37,7 +39,9 @@ class HomeWidget {
   }
 
   static Widget authenticatedScreen(
-      {required List<ProductModel> products, required HomeBloc onPress}) {
+      {required List<ProductModel> products,
+      required HomeBloc onPress,
+      required FavouriteBloc favouriteBloc}) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 12.w),
       child: GridView.builder(
@@ -61,6 +65,8 @@ class HomeWidget {
                   idProduct: products[index].id!, quantity: -1),
             ),
             quantityInCart: onPress.getQuantityInCartById(products[index].id!),
+            homeBloc: onPress,
+            favouriteBloc: favouriteBloc,
           );
         },
       ),
@@ -72,6 +78,8 @@ class HomeWidget {
     required VoidCallback add,
     required VoidCallback minus,
     required int quantityInCart,
+    required HomeBloc homeBloc,
+    FavouriteBloc? favouriteBloc,
   }) {
     return Container(
       decoration: BoxDecoration(
@@ -127,6 +135,19 @@ class HomeWidget {
               overflow: TextOverflow.ellipsis,
               style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w700),
             ),
+            trailing: IconButton(
+              onPressed: () {
+                homeBloc
+                    .add(FavouriteButtonClickedEvent(idProduct: product.id!));
+                favouriteBloc!.add(FavouriteInitialEvent());
+              },
+              icon: Icon(
+                homeBloc.isFavourite(product.id!) == true
+                    ? CupertinoIcons.heart_fill
+                    : CupertinoIcons.heart,
+                color: Colors.red.shade400,
+              ),
+            ),
           ),
           quantityInCart == 0
               ? addToCartButton(add)
@@ -136,7 +157,7 @@ class HomeWidget {
                       flex: 1,
                       child: IconButton(
                         onPressed: minus,
-                        icon: Icon(CupertinoIcons.minus_circle),
+                        icon: const Icon(CupertinoIcons.minus_circle),
                       ),
                     ),
                     Expanded(
@@ -150,7 +171,7 @@ class HomeWidget {
                       flex: 1,
                       child: IconButton(
                         onPressed: add,
-                        icon: Icon(CupertinoIcons.add_circled),
+                        icon: const Icon(CupertinoIcons.add_circled),
                       ),
                     ),
                   ],

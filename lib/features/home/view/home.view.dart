@@ -6,6 +6,7 @@ import 'package:neko_coffee/common/widgets/dialog.widget.dart';
 import 'package:neko_coffee/common/widgets/failure.widget.dart';
 import 'package:neko_coffee/common/widgets/loading.widget.dart';
 import 'package:neko_coffee/features/cart/bloc/index.dart';
+import 'package:neko_coffee/features/favorite/bloc/index.dart';
 import 'package:neko_coffee/features/home/bloc/home_bloc.dart';
 import 'package:neko_coffee/features/home/bloc/home_event.dart';
 import 'package:neko_coffee/features/home/bloc/home_state.dart';
@@ -13,26 +14,27 @@ import 'package:neko_coffee/features/home/view/home.widget.dart';
 import 'package:neko_coffee/models/cart.model.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
-
+  const HomeScreen(
+      {super.key, required this.homeBloc, required this.favouriteBloc});
+  final HomeBloc homeBloc;
+  final FavouriteBloc favouriteBloc;
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final homeBloc = HomeBloc(InitialHomeState());
   List<CartModel> cart = [];
 
   @override
   void initState() {
-    homeBloc.add(InitialHomeEvent());
+    widget.homeBloc.add(InitialHomeEvent());
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<HomeBloc, HomeState>(
-      bloc: homeBloc,
+      bloc: widget.homeBloc,
       listenWhen: (previous, current) => current is HomeActionState,
       buildWhen: (previous, current) => current is! HomeActionState,
       listener: (context, state) {
@@ -44,7 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
         }
         if (state is HomeNavigateToCartActionState) {
           Navigator.of(context).push(MaterialPageRoute(
-              builder: (_) => CartScreen(homeBloc: homeBloc)));
+              builder: (_) => CartScreen(homeBloc: widget.homeBloc)));
         }
       },
       builder: (context, state) {
@@ -56,22 +58,23 @@ class _HomeScreenState extends State<HomeScreen> {
             state as UnAuthenticatedHomeState;
             return Scaffold(
               appBar: AppBar(
-                title: Text('Home UnAu'),
+                title: const Text('Home UnAu'),
                 automaticallyImplyLeading: false,
               ),
               body: HomeWidget.unAuthenticatedScreen(
-                  products: state.products, onPress: homeBloc),
+                  products: state.products, onPress: widget.homeBloc),
             );
 
           case AuthenticatedHomeState:
             state as AuthenticatedHomeState;
             return Scaffold(
               appBar: AppBar(
-                title: Text('Home Au'),
+                title: const Text('Home Au'),
                 automaticallyImplyLeading: false,
                 actions: [
                   InkWell(
-                    onTap: () => homeBloc.add(HomeCartButtonClickedEvent()),
+                    onTap: () =>
+                        widget.homeBloc.add(HomeCartButtonClickedEvent()),
                     child: Badge(
                       label: Text('${state.cart.length}'),
                       isLabelVisible: state.cart == [] ? false : true,
@@ -84,14 +87,17 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
               body: HomeWidget.authenticatedScreen(
-                  products: state.products, onPress: homeBloc),
+                products: state.products,
+                onPress: widget.homeBloc,
+                favouriteBloc: widget.favouriteBloc,
+              ),
             );
 
           case LoadingHomeState:
-            if (homeBloc.client.auth.currentUser != null) {
+            if (widget.homeBloc.client.auth.currentUser != null) {
               return Scaffold(
                 appBar: AppBar(
-                  title: Text('Home Au'),
+                  title: const Text('Home Au'),
                   leading: const Icon(Icons.menu),
                 ),
                 body: const LoadingWidget(),
@@ -100,7 +106,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
             return Scaffold(
               appBar: AppBar(
-                title: Text('Home UnAu'),
+                title: const Text('Home UnAu'),
                 leading: const Icon(Icons.menu),
               ),
               body: const LoadingWidget(),
