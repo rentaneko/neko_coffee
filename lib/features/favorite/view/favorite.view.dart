@@ -31,11 +31,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
       ),
       body: BlocConsumer<FavouriteBloc, FavouriteState>(
         bloc: widget.favouriteBloc,
-        listener: (context, state) {
-          if (state is FavouriteSubcribeState) {
-            widget.favouriteBloc.add(FavoriteSubcribeEvent());
-          }
-        },
+        listener: (context, state) {},
         listenWhen: (previous, current) => current is FavouriteActionState,
         buildWhen: (previous, current) => current is! FavouriteActionState,
         builder: (context, state) {
@@ -84,6 +80,48 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                   );
                 },
               );
+
+            case FavouriteAddToListSuccessState:
+              state as FavouriteAddToListSuccessState;
+              return ListView.separated(
+                itemCount: state.favourites.length,
+                separatorBuilder: (BuildContext context, int index) {
+                  return SizedBox(height: 10.h);
+                },
+                itemBuilder: (BuildContext context, int index) {
+                  return Slidable(
+                    closeOnScroll: true,
+                    endActionPane: ActionPane(
+                      motion: const ScrollMotion(),
+                      extentRatio: 0.25,
+                      children: [
+                        SlidableAction(
+                          onPressed: (context) => widget.favouriteBloc.add(
+                            RemoveItemClickedEvent(
+                              idProduct: state.favourites[index].idProduct!,
+                            ),
+                          ),
+                          backgroundColor: Colors.red,
+                          foregroundColor: Colors.white,
+                          icon: CupertinoIcons.trash,
+                          label: 'Delete',
+                        ),
+                      ],
+                    ),
+                    child: ListTile(
+                      leading:
+                          Image.network('${state.favourites[index].imgUrl}'),
+                      title: Text('${state.favourites[index].name}'),
+                      subtitle: Text(
+                        '${state.favourites[index].desc}',
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
+                      ),
+                    ),
+                  );
+                },
+              );
+
             default:
               return const LoadingWidget();
           }

@@ -1,13 +1,19 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:neko_coffee/features/cart/bloc/index.dart';
 import 'package:neko_coffee/features/favorite/bloc/index.dart';
+import 'package:neko_coffee/features/home/bloc/home_bloc.dart';
 import 'package:neko_coffee/features/home/bloc/index.dart';
 import 'package:neko_coffee/models/product.model.dart';
 
 class HomeWidget {
-  static Widget unAuthenticatedScreen(
-      {required List<ProductModel> products, required HomeBloc onPress}) {
+  static Widget unAuthenticatedScreen({
+    required List<ProductModel> products,
+    required CartBloc cartBloc,
+    required HomeBloc homeBloc,
+  }) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 12.w),
       child: GridView.builder(
@@ -22,26 +28,37 @@ class HomeWidget {
         itemBuilder: (BuildContext context, int index) {
           return productCart(
             product: products[index],
-            add: () => onPress.add(
-              AddToCartClickedHomeEvent(
-                  idProduct: products[index].id!, quantity: 1),
-            ),
-            minus: () => onPress.add(
-              AddToCartClickedHomeEvent(
-                  idProduct: products[index].id!, quantity: -1),
-            ),
-            quantityInCart: onPress.getQuantityInCartById(products[index].id!),
-            homeBloc: onPress,
+            add: () {
+              cartBloc.add(
+                UpdateQuantityItemCartEvent(
+                  idProduct: products[index].id!,
+                  quantity: 1,
+                  homeBloc: homeBloc,
+                ),
+              );
+            },
+            minus: () {
+              cartBloc.add(
+                UpdateQuantityItemCartEvent(
+                  idProduct: products[index].id!,
+                  quantity: -1,
+                  homeBloc: homeBloc,
+                ),
+              );
+            },
+            quantityInCart: cartBloc.getQuantityInCartById(products[index].id!),
           );
         },
       ),
     );
   }
 
-  static Widget authenticatedScreen(
-      {required List<ProductModel> products,
-      required HomeBloc onPress,
-      required FavouriteBloc favouriteBloc}) {
+  static Widget authenticatedScreen({
+    required List<ProductModel> products,
+    required CartBloc cartBloc,
+    required FavouriteBloc favouriteBloc,
+    required HomeBloc homeBloc,
+  }) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 12.w),
       child: GridView.builder(
@@ -56,16 +73,25 @@ class HomeWidget {
         itemBuilder: (BuildContext context, int index) {
           return productCart(
             product: products[index],
-            add: () => onPress.add(
-              AddToCartClickedHomeEvent(
-                  idProduct: products[index].id!, quantity: 1),
-            ),
-            minus: () => onPress.add(
-              AddToCartClickedHomeEvent(
-                  idProduct: products[index].id!, quantity: -1),
-            ),
-            quantityInCart: onPress.getQuantityInCartById(products[index].id!),
-            homeBloc: onPress,
+            add: () {
+              cartBloc.add(
+                UpdateQuantityItemCartEvent(
+                  idProduct: products[index].id!,
+                  quantity: 1,
+                  homeBloc: homeBloc,
+                ),
+              );
+            },
+            minus: () {
+              cartBloc.add(
+                UpdateQuantityItemCartEvent(
+                  idProduct: products[index].id!,
+                  quantity: -1,
+                  homeBloc: homeBloc,
+                ),
+              );
+            },
+            quantityInCart: cartBloc.getQuantityInCartById(products[index].id!),
             favouriteBloc: favouriteBloc,
           );
         },
@@ -78,7 +104,6 @@ class HomeWidget {
     required VoidCallback add,
     required VoidCallback minus,
     required int quantityInCart,
-    required HomeBloc homeBloc,
     FavouriteBloc? favouriteBloc,
   }) {
     return Container(
@@ -135,18 +160,9 @@ class HomeWidget {
               overflow: TextOverflow.ellipsis,
               style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w700),
             ),
-            trailing: IconButton(
-              onPressed: () {
-                homeBloc
-                    .add(FavouriteButtonClickedEvent(idProduct: product.id!));
-                favouriteBloc!.add(FavouriteInitialEvent());
-              },
-              icon: Icon(
-                homeBloc.isFavourite(product.id!) == true
-                    ? CupertinoIcons.heart_fill
-                    : CupertinoIcons.heart,
-                color: Colors.red.shade400,
-              ),
+            trailing: FavoriteIconButton(
+              favouriteBloc: favouriteBloc!,
+              idProduct: product.id!,
             ),
           ),
           quantityInCart == 0
@@ -203,6 +219,35 @@ class HomeWidget {
           minimumSize: Size(double.infinity, 36.h),
         ),
       ),
+    );
+  }
+}
+
+class FavoriteIconButton extends StatelessWidget {
+  final FavouriteBloc favouriteBloc;
+  final String idProduct;
+
+  const FavoriteIconButton(
+      {super.key, required this.favouriteBloc, required this.idProduct});
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<FavouriteBloc, FavouriteState>(
+      bloc: favouriteBloc,
+      buildWhen: (previous, current) => current is! FavouriteActionState,
+      builder: (context, state) {
+        return IconButton(
+          onPressed: () {
+            favouriteBloc
+                .add(FavouriteButtonInHomeClickedEvent(idProduct: idProduct));
+          },
+          icon: Icon(
+            favouriteBloc.isFavourite(idProduct) == true
+                ? CupertinoIcons.heart_fill
+                : CupertinoIcons.heart,
+            color: Colors.red.shade400,
+          ),
+        );
+      },
     );
   }
 }

@@ -26,6 +26,15 @@ class AuthenticatedHomeState extends HomeState {
       {required this.products, required this.cart, required this.favourites});
 }
 
+class ReloadingProductHomeState extends HomeState {
+  final List<ProductModel> products;
+  final List<CartModel> cart;
+  final List<FavouriteModel> favourites;
+
+  ReloadingProductHomeState(
+      {required this.products, required this.cart, required this.favourites});
+}
+
 class ErrorHomeState extends HomeState {
   ErrorHomeState(this.errorMessage);
 

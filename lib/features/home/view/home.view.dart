@@ -15,9 +15,13 @@ import 'package:neko_coffee/models/cart.model.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen(
-      {super.key, required this.homeBloc, required this.favouriteBloc});
+      {super.key,
+      required this.homeBloc,
+      required this.favouriteBloc,
+      required this.cartBloc});
   final HomeBloc homeBloc;
   final FavouriteBloc favouriteBloc;
+  final CartBloc cartBloc;
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
@@ -62,7 +66,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 automaticallyImplyLeading: false,
               ),
               body: HomeWidget.unAuthenticatedScreen(
-                  products: state.products, onPress: widget.homeBloc),
+                products: state.products,
+                cartBloc: widget.cartBloc,
+                homeBloc: widget.homeBloc,
+              ),
             );
 
           case AuthenticatedHomeState:
@@ -88,8 +95,9 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               body: HomeWidget.authenticatedScreen(
                 products: state.products,
-                onPress: widget.homeBloc,
+                cartBloc: widget.cartBloc,
                 favouriteBloc: widget.favouriteBloc,
+                homeBloc: widget.homeBloc,
               ),
             );
 

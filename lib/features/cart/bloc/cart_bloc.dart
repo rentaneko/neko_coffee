@@ -60,13 +60,11 @@ class CartBloc extends Bloc<CartEvent, CartState> {
           .then(
         (value) {
           cart = value.map((e) => CartModel.fromJson(e)).toList();
-
-          event.homeBloc.add(InitialHomeEvent());
         },
       );
 
       getTotal();
-
+      event.homeBloc.add(ReloadingProductHomeEvent());
       emit(CartLoadedSuccessState(cart: cart));
     } catch (e) {
       emit(CartErrorState(errorMsg: e.toString()));

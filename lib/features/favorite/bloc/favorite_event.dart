@@ -11,4 +11,8 @@ class RemoveItemClickedEvent extends FavouriteEvent {
   RemoveItemClickedEvent({required this.idProduct});
 }
 
-class FavoriteSubcribeEvent extends FavouriteEvent {}
+class FavouriteButtonInHomeClickedEvent extends FavouriteEvent {
+  final String idProduct;
+
+  FavouriteButtonInHomeClickedEvent({required this.idProduct});
+}

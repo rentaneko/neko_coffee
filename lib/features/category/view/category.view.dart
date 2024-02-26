@@ -5,6 +5,7 @@ import 'package:neko_coffee/common/widgets/empty.widget.dart';
 import 'package:neko_coffee/common/widgets/failure.widget.dart';
 import 'package:neko_coffee/common/widgets/loading.widget.dart';
 import 'package:neko_coffee/features/category/bloc/index.dart';
+import 'package:neko_coffee/features/category/view/category.widget.dart';
 
 class CategoryScreen extends StatefulWidget {
   const CategoryScreen({super.key, required this.categoryBloc});
@@ -75,7 +76,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                   ),
                 ),
                 Expanded(
-                  flex: 2,
+                  flex: 3,
                   child: Column(
                     mainAxisAlignment: state.subCates.isEmpty
                         ? MainAxisAlignment.center
@@ -83,35 +84,116 @@ class _CategoryScreenState extends State<CategoryScreen> {
                     children: [
                       Text('${state.cate[selectedCate].name}'),
                       state.subCates.isNotEmpty
-                          ? GridView.builder(
-                              gridDelegate:
-                                  const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 2,
-                                mainAxisExtent: 150,
-                              ),
-                              shrinkWrap: true,
-                              itemCount: state.subCates.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                return Container(
-                                  padding: EdgeInsets.all(12.w),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Image.network(
-                                        '${state.subCates[index].icon}',
-                                        fit: BoxFit.contain,
-                                        height: 85.h,
-                                      ),
-                                      SizedBox(height: 12.h),
-                                      Text('${state.subCates[index].name}'),
-                                    ],
-                                  ),
-                                );
-                              },
-                            )
+                          ? CategoryWidget.subCategoryButton(
+                              categoryBloc: widget.categoryBloc)
                           : const EmptyWidget(),
+                      GridView.builder(
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 3,
+                          mainAxisExtent: 150.h,
+                          crossAxisSpacing: 8.w,
+                          mainAxisSpacing: 12.h,
+                        ),
+                        itemCount: state.products.length,
+                        shrinkWrap: true,
+                        itemBuilder: (BuildContext context, int index) {
+                          return Container(
+                            color: Colors.black26,
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 8.w,
+                              vertical: 10.h,
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image.network(
+                                  '${state.products[index].imgUrl}',
+                                  height: 60.h,
+                                  width: 55.w,
+                                  fit: BoxFit.contain,
+                                ),
+                                Text(
+                                  '${state.products[index].name}',
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.center,
+                                ),
+                                Text(
+                                  '${state.products[index].price} \$',
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            );
+
+          case CategoryLoadingProductState:
+            state as CategoryLoadingProductState;
+            return Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: ListView.builder(
+                    itemCount: state.categories.length,
+                    shrinkWrap: true,
+                    itemBuilder: (BuildContext context, int index) {
+                      return InkWell(
+                        onTap: () {
+                          setState(() => selectedCate = index);
+                          widget.categoryBloc.add(
+                            CategoryClickedEvent(
+                                idParent: state.categories[index].id!,
+                                cates: state.categories),
+                          );
+                        },
+                        child: Container(
+                          color: selectedCate == index
+                              ? Colors.amber.shade100
+                              : Colors.white,
+                          padding: EdgeInsets.all(16.w),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Image.network(
+                                '${state.categories[index].icon}',
+                                fit: BoxFit.contain,
+                                height: 80.h,
+                              ),
+                              SizedBox(height: 12.h),
+                              Text('${state.categories[index].name}'),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                Expanded(
+                  flex: 3,
+                  child: Column(
+                    mainAxisAlignment: state.subCategories.isEmpty
+                        ? MainAxisAlignment.center
+                        : MainAxisAlignment.start,
+                    children: [
+                      Text('${state.categories[selectedCate].name}'),
+                      state.subCategories.isNotEmpty
+                          ? CategoryWidget.subCategoryButton(
+                              categoryBloc: widget.categoryBloc)
+                          : const EmptyWidget(),
+                      SizedBox(
+                        height: 500.h,
+                        child: const Center(child: LoadingWidget()),
+                      ),
                     ],
                   ),
                 ),
@@ -154,7 +236,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                     },
                   ),
                 ),
-                const Expanded(flex: 2, child: LoadingWidget()),
+                const Expanded(flex: 3, child: LoadingWidget()),
               ],
             );
 

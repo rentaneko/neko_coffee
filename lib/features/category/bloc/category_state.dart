@@ -1,4 +1,5 @@
 import 'package:neko_coffee/models/category.model.dart';
+import 'package:neko_coffee/models/product.model.dart';
 import 'package:neko_coffee/models/sub_category.model.dart';
 
 abstract class CategoryState {}
@@ -18,8 +19,10 @@ class ErrorCategoryState extends CategoryState {
 class LoadingSuccessCategoryState extends CategoryState {
   final List<CategoryModel> cate;
   final List<SubCategoryModel> subCates;
+  final List<ProductModel> products;
 
-  LoadingSuccessCategoryState({required this.cate, required this.subCates});
+  LoadingSuccessCategoryState(
+      {required this.cate, required this.subCates, required this.products});
 }
 
 class LoadingSubCategoryState extends CategoryState {
@@ -27,3 +30,15 @@ class LoadingSubCategoryState extends CategoryState {
 
   LoadingSubCategoryState({required this.cates});
 }
+
+class CategoryLoadingProductState extends CategoryState {
+  final List<CategoryModel> categories;
+  final List<SubCategoryModel> subCategories;
+
+  CategoryLoadingProductState(
+      {required this.categories, required this.subCategories});
+}
+
+class CategoryLoadedProductState extends CategoryState {}
+
+class SubCategoryClickedState extends CategoryActionState {}

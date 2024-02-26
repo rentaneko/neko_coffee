@@ -27,3 +27,5 @@ class FavouriteButtonClickedEvent extends HomeEvent {
 
   FavouriteButtonClickedEvent({required this.idProduct});
 }
+
+class ReloadingProductHomeEvent extends HomeEvent {}

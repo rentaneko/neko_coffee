@@ -48,7 +48,11 @@ class _AppScreenState extends State<AppScreen> {
           body: IndexedStack(
             index: selectedIndex,
             children: [
-              HomeScreen(homeBloc: homeBloc, favouriteBloc: favouriteBloc),
+              HomeScreen(
+                homeBloc: homeBloc,
+                favouriteBloc: favouriteBloc,
+                cartBloc: cartBloc,
+              ),
               CategoryScreen(categoryBloc: categoryBloc),
               FavoriteScreen(favouriteBloc: favouriteBloc),
               AccountScreen(accountBloc: accountBloc),

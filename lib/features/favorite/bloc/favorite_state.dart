@@ -19,4 +19,10 @@ class FavouriteErrorState extends FavouriteState {
   FavouriteErrorState({required this.errorMsg});
 }
 
-class FavouriteSubcribeState extends FavouriteState {}
+class FavouriteButtonInHomeClickedState extends FavouriteActionState {}
+
+class FavouriteAddToListSuccessState extends FavouriteState {
+  final List<FavouriteModel> favourites;
+
+  FavouriteAddToListSuccessState({required this.favourites});
+}

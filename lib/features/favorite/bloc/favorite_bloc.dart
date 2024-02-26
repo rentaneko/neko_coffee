@@ -12,7 +12,7 @@ class FavouriteBloc extends Bloc<FavouriteEvent, FavouriteState> {
 
     on<RemoveItemClickedEvent>(removeItemClickedEvent);
 
-    on<FavoriteSubcribeEvent>(favoriteSubcribeEvent);
+    on<FavouriteButtonInHomeClickedEvent>(favouriteButtonInHomeClickedEvent);
   }
 
   FutureOr<void> favouriteInitialEvent(
@@ -61,9 +61,25 @@ class FavouriteBloc extends Bloc<FavouriteEvent, FavouriteState> {
     return false;
   }
 
-  FutureOr<void> favoriteSubcribeEvent(
-      FavoriteSubcribeEvent event, Emitter<FavouriteState> emit) async {
+  FutureOr<void> favouriteButtonInHomeClickedEvent(
+    FavouriteButtonInHomeClickedEvent event,
+    Emitter<FavouriteState> emit,
+  ) async {
+    emit(FavouriteButtonInHomeClickedState());
     try {
+      if (isFavourite(event.idProduct)) {
+        await client
+            .from('Favourite')
+            .delete()
+            .eq('id_product', event.idProduct)
+            .eq('id_user', client.auth.currentUser!.id);
+      } else {
+        await client.from('Favourite').insert({
+          'id_product': event.idProduct,
+          'id_user': client.auth.currentUser!.id,
+        });
+      }
+
       await client
           .from('Favourite')
           .select('*, Product(name, img_url, description)')
