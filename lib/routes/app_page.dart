@@ -8,6 +8,7 @@ import 'package:neko_coffee/features/favorite/bloc/favorite_state.dart';
 import 'package:neko_coffee/features/home/bloc/home_bloc.dart';
 import 'package:neko_coffee/features/home/bloc/home_state.dart';
 import 'package:neko_coffee/features/login/bloc/index.dart';
+import 'package:neko_coffee/features/product_detail/bloc/index.dart';
 import 'package:neko_coffee/features/signup/bloc/index.dart';
 import 'package:neko_coffee/routes/app_router.dart';
 
@@ -46,6 +47,12 @@ class AppPages {
         path: CART_ROUTE,
         page: const CartScreen(),
         bloc: BlocProvider(create: (_) => CartBloc(InitialCartState())),
+      ),
+      PageEntity(
+        path: DETAIL_ROUTE,
+        page: const ProductDetailScreen(),
+        bloc: BlocProvider(
+            create: (_) => ProductDetailBloc(ProductDetailInitialState())),
       ),
     ];
   }

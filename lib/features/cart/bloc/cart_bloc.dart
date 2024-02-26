@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:neko_coffee/common/functions/calculation.dart';
 import 'package:neko_coffee/features/cart/bloc/index.dart';
 import 'package:neko_coffee/features/home/bloc/home_event.dart';
 import 'package:neko_coffee/models/cart.model.dart';
@@ -39,14 +40,16 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       UpdateQuantityItemCartEvent event, Emitter<CartState> emit) async {
     emit(CartUpdateItemInCartState());
     try {
-      if (getQuantityInCartById(event.idProduct) == 1 && event.quantity == -1) {
+      if (getQuantityInCartById(event.idProduct, cart) == 1 &&
+          event.quantity == -1) {
         await client.from('Cart').delete().eq('id_product', event.idProduct);
       } else {
         await client.from('Cart').upsert(
           {
             'id_product': event.idProduct,
             'id_user': client.auth.currentUser!.id,
-            'quantity': getQuantityInCartById(event.idProduct) + event.quantity,
+            'quantity':
+                getQuantityInCartById(event.idProduct, cart) + event.quantity,
           },
           // cant be update if duplicate primary key
           // ignoreDuplicates: true,
@@ -76,14 +79,5 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     for (var item in cart) {
       amount += (item.price! * item.quantity!);
     }
-  }
-
-  int getQuantityInCartById(String id) {
-    for (var item in cart) {
-      if (item.idProduct == id) {
-        return item.quantity!;
-      }
-    }
-    return 0;
   }
 }

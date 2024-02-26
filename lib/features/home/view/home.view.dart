@@ -69,6 +69,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 products: state.products,
                 cartBloc: widget.cartBloc,
                 homeBloc: widget.homeBloc,
+                context: context,
               ),
             );
 
@@ -98,6 +99,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 cartBloc: widget.cartBloc,
                 favouriteBloc: widget.favouriteBloc,
                 homeBloc: widget.homeBloc,
+                context: context,
               ),
             );
 

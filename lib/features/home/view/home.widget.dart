@@ -2,10 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:neko_coffee/common/functions/calculation.dart';
 import 'package:neko_coffee/features/cart/bloc/index.dart';
 import 'package:neko_coffee/features/favorite/bloc/index.dart';
 import 'package:neko_coffee/features/home/bloc/home_bloc.dart';
 import 'package:neko_coffee/features/home/bloc/index.dart';
+import 'package:neko_coffee/features/product_detail/view/product_detail_screen.dart';
 import 'package:neko_coffee/models/product.model.dart';
 
 class HomeWidget {
@@ -13,6 +15,7 @@ class HomeWidget {
     required List<ProductModel> products,
     required CartBloc cartBloc,
     required HomeBloc homeBloc,
+    required BuildContext context,
   }) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 12.w),
@@ -28,6 +31,16 @@ class HomeWidget {
         itemBuilder: (BuildContext context, int index) {
           return productCart(
             product: products[index],
+            navigation: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => ProductDetailScreen(
+                    cartBloc: cartBloc,
+                    idProduct: products[index].id,
+                  ),
+                ),
+              );
+            },
             add: () {
               cartBloc.add(
                 UpdateQuantityItemCartEvent(
@@ -46,7 +59,8 @@ class HomeWidget {
                 ),
               );
             },
-            quantityInCart: cartBloc.getQuantityInCartById(products[index].id!),
+            quantityInCart:
+                getQuantityInCartById(products[index].id!, cartBloc.cart),
           );
         },
       ),
@@ -58,6 +72,7 @@ class HomeWidget {
     required CartBloc cartBloc,
     required FavouriteBloc favouriteBloc,
     required HomeBloc homeBloc,
+    required BuildContext context,
   }) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 12.w),
@@ -73,6 +88,16 @@ class HomeWidget {
         itemBuilder: (BuildContext context, int index) {
           return productCart(
             product: products[index],
+            navigation: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => ProductDetailScreen(
+                    cartBloc: cartBloc,
+                    idProduct: products[index].id,
+                  ),
+                ),
+              );
+            },
             add: () {
               cartBloc.add(
                 UpdateQuantityItemCartEvent(
@@ -91,7 +116,8 @@ class HomeWidget {
                 ),
               );
             },
-            quantityInCart: cartBloc.getQuantityInCartById(products[index].id!),
+            quantityInCart:
+                getQuantityInCartById(products[index].id!, cartBloc.cart),
             favouriteBloc: favouriteBloc,
           );
         },
@@ -103,96 +129,100 @@ class HomeWidget {
     required ProductModel product,
     required VoidCallback add,
     required VoidCallback minus,
+    required VoidCallback navigation,
     required int quantityInCart,
     FavouriteBloc? favouriteBloc,
   }) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(4),
-          topRight: Radius.circular(4),
+    return InkWell(
+      onTap: navigation,
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(4),
+            topRight: Radius.circular(4),
+          ),
+          border: Border.all(width: 0.5),
         ),
-        border: Border.all(width: 0.5),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Expanded(
-            flex: 2,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(4),
-              child: Image.network(
-                '${product.imgUrl}',
-                height: 150.h,
-                width: double.infinity,
-                fit: BoxFit.contain,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Expanded(
+              flex: 2,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(4),
+                child: Image.network(
+                  '${product.imgUrl}',
+                  height: 150.h,
+                  width: double.infinity,
+                  fit: BoxFit.contain,
+                ),
               ),
             ),
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8.w),
-            child: Text(
-              '${product.name}',
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w600),
-              textAlign: TextAlign.start,
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 8.w),
+              child: Text(
+                '${product.name}',
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w600),
+                textAlign: TextAlign.start,
+              ),
             ),
-          ),
-          SizedBox(height: 8.h),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8.w),
-            child: Text(
-              '${product.desc}',
-              overflow: TextOverflow.ellipsis,
-              maxLines: 2,
-              style: TextStyle(fontSize: 12.sp),
+            SizedBox(height: 8.h),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 8.w),
+              child: Text(
+                '${product.desc}',
+                overflow: TextOverflow.ellipsis,
+                maxLines: 2,
+                style: TextStyle(fontSize: 12.sp),
+              ),
             ),
-          ),
-          SizedBox(height: 16.h),
-          ListTile(
-            minLeadingWidth: 0,
-            horizontalTitleGap: 0,
-            contentPadding: EdgeInsets.symmetric(horizontal: 8.w),
-            minVerticalPadding: 0,
-            leading: Text(
-              '${product.price}\$',
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w700),
+            SizedBox(height: 16.h),
+            ListTile(
+              minLeadingWidth: 0,
+              horizontalTitleGap: 0,
+              contentPadding: EdgeInsets.symmetric(horizontal: 8.w),
+              minVerticalPadding: 0,
+              leading: Text(
+                '${product.price}\$',
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w700),
+              ),
+              trailing: FavoriteIconButton(
+                favouriteBloc: favouriteBloc!,
+                idProduct: product.id!,
+              ),
             ),
-            trailing: FavoriteIconButton(
-              favouriteBloc: favouriteBloc!,
-              idProduct: product.id!,
-            ),
-          ),
-          quantityInCart == 0
-              ? addToCartButton(add)
-              : Row(
-                  children: [
-                    Expanded(
-                      flex: 1,
-                      child: IconButton(
-                        onPressed: minus,
-                        icon: const Icon(CupertinoIcons.minus_circle),
+            quantityInCart == 0
+                ? addToCartButton(add)
+                : Row(
+                    children: [
+                      Expanded(
+                        flex: 1,
+                        child: IconButton(
+                          onPressed: minus,
+                          icon: const Icon(CupertinoIcons.minus_circle),
+                        ),
                       ),
-                    ),
-                    Expanded(
-                      flex: 2,
-                      child: Text(
-                        '$quantityInCart',
-                        textAlign: TextAlign.center,
+                      Expanded(
+                        flex: 2,
+                        child: Text(
+                          '$quantityInCart',
+                          textAlign: TextAlign.center,
+                        ),
                       ),
-                    ),
-                    Expanded(
-                      flex: 1,
-                      child: IconButton(
-                        onPressed: add,
-                        icon: const Icon(CupertinoIcons.add_circled),
+                      Expanded(
+                        flex: 1,
+                        child: IconButton(
+                          onPressed: add,
+                          icon: const Icon(CupertinoIcons.add_circled),
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-        ],
+                    ],
+                  ),
+          ],
+        ),
       ),
     );
   }

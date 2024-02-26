@@ -8,3 +8,4 @@ const String LOGIN_ROUTE = '/login';
 const String SIGNUP_ROUTE = '/signup';
 const String APP_ROUTE = '/app';
 const String ACCOUNT_ROUTE = '/account';
+const String DETAIL_ROUTE = '/detail';
