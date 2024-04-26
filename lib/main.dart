@@ -1,45 +1,67 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:neko_coffee/core/common/cubit/app_user_cubit.dart';
+import 'package:neko_coffee/core/theme/theme.dart';
+import 'package:neko_coffee/features/auth/presentation/pages/login_page.dart';
+import 'package:neko_coffee/features/home/presentation/pages/home.screen.dart';
+import 'package:neko_coffee/init_dependencies.dart';
+import 'features/auth/bloc/auth_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // await ScreenUtil.ensureScreenSize();
-  // await Supabase.initialize(
-  //   url: 'https://jwkhdpftwjndgkzrczjy.supabase.co',
-  //   anonKey:
-  //       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp3a2hkcGZ0d2puZGdrenJjemp5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDY1MDk0MjgsImV4cCI6MjAyMjA4NTQyOH0.XgoNXmbMPflOSpoilbyhRsn6C1CRuQSe6fymz-1sJZs',
-  //   realtimeClientOptions: const RealtimeClientOptions(
-  //     logLevel: RealtimeLogLevel.info,
-  //   ),
-  //   authOptions: const FlutterAuthClientOptions(
-  //     authFlowType: AuthFlowType.pkce,
-  //     autoRefreshToken: true,
-  //   ),
-  // );
-
-  runApp(const MyApp());
+  await ScreenUtil.ensureScreenSize();
+  await initDependencies();
+  runApp(
+    MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (_) => serviceLocator<AppUserCubit>(),
+        ),
+        BlocProvider(
+          create: (_) => serviceLocator<AuthBloc>(),
+        ),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return SizedBox();
+  State<MyApp> createState() => _MyAppState();
+}
 
-    // return MultiBlocProvider(
-    //   providers: [...AppPages.blocer(context)],
-    //   child: ScreenUtilInit(
-    //     designSize: const Size(393, 852),
-    //     builder: (context, child) => SafeArea(
-    //       child: MaterialApp(
-    //         debugShowCheckedModeBanner: false,
-    //         theme: ThemeData(primaryColor: Colors.teal),
-    //         navigatorObservers: [AppPages.observer],
-    //         initialRoute: SPLASH_ROUTE,
-    //         onGenerateRoute: AppPages.generateRouteSettings,
-    //       ),
-    //     ),
-    //   ),
-    // );
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    context.read<AuthBloc>().add(AuthIsUserLoggedIn());
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ScreenUtilInit(
+      designSize: const Size(320, 470),
+      builder: (context, child) => SafeArea(
+        child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          theme: AppTheme.darkThemeMode,
+          home: BlocSelector<AppUserCubit, AppUserState, bool>(
+            selector: (state) {
+              return state is AppUserLoggedIn;
+            },
+            builder: (context, isLoggedIn) {
+              if (isLoggedIn) {
+                return const HomeScreen();
+              }
+              return const LoginPage();
+            },
+          ),
+        ),
+      ),
+    );
   }
 }
