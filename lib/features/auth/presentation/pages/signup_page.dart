@@ -8,7 +8,7 @@ import 'package:neko_coffee/core/common/widgets/failure.widget.dart';
 import 'package:neko_coffee/features/auth/presentation/widgets/auth_field.dart';
 import 'package:neko_coffee/features/auth/presentation/widgets/auth_gradient_button.dart';
 
-import '../../../home/presentation/pages/home.screen.dart';
+import '../../../blog/presentation/page/blog.screen.dart';
 import '../../bloc/auth_bloc.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -52,7 +52,7 @@ class _SignUpPageState extends State<SignUpPage> {
               if (state is AuthSuccessState) {
                 Navigator.of(context).pop();
                 Navigator.of(context)
-                    .pushAndRemoveUntil(HomeScreen.route(), (route) => false);
+                    .pushAndRemoveUntil(BlogScreen.route(), (route) => false);
               }
               if (state is AuthLoadingState) {
                 showLoadingDialog(context, title: 'Loading...');

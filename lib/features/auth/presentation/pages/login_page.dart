@@ -6,7 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:neko_coffee/core/common/widgets/failure.widget.dart';
 import 'package:neko_coffee/core/common/widgets/loading.widget.dart';
 import 'package:neko_coffee/features/auth/presentation/pages/signup_page.dart';
-import 'package:neko_coffee/features/home/presentation/pages/home.screen.dart';
+import 'package:neko_coffee/features/blog/presentation/page/blog.screen.dart';
 import '../../../../core/theme/app_pallete.dart';
 import '../../../../core/common/widgets/dialog.widget.dart';
 import '../../bloc/auth_bloc.dart';
@@ -45,7 +45,7 @@ class _LoginPageState extends State<LoginPage> {
             if (state is AuthSuccessState) {
               Navigator.of(context).pop();
               Navigator.of(context)
-                  .pushAndRemoveUntil(HomeScreen.route(), (route) => false);
+                  .pushAndRemoveUntil(BlogScreen.route(), (route) => false);
             }
             if (state is AuthLoadingState) {
               showLoadingDialog(context, title: 'Loading...');

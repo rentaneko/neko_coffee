@@ -5,6 +5,7 @@ import 'package:neko_coffee/core/common/cubit/app_user_cubit.dart';
 import 'package:neko_coffee/core/error/server_error.dart';
 import 'package:neko_coffee/core/use_case/usecase.dart';
 import 'package:neko_coffee/domain/usecase/current_user.dart';
+import 'package:neko_coffee/domain/usecase/logout_user.dart';
 import 'package:neko_coffee/domain/usecase/usecase_login.dart';
 import 'package:neko_coffee/domain/usecase/usecase_sign_up.dart';
 
@@ -17,21 +18,24 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final UserLogin _userLogin;
   final CurrentUser _currentUser;
   final AppUserCubit _appUserCubit;
-
+  final LogoutUser _logoutUser;
   AuthBloc({
     required UserSignUp userSignUp,
     required UserLogin userLogin,
     required CurrentUser currentUser,
     required AppUserCubit appUserCubit,
+    required LogoutUser logoutUser,
   })  : _userSignUp = userSignUp,
         _userLogin = userLogin,
         _currentUser = currentUser,
         _appUserCubit = appUserCubit,
+        _logoutUser = logoutUser,
         super(AuthInitialState()) {
     on<AuthEvent>((_, emit) => AuthLoadingState());
     on<AuthSignUp>(authSignUp);
     on<AuthLogin>(authLogin);
     on<AuthIsUserLoggedIn>(authIsUserLoggedIn);
+    on<AuthUserLogout>(authUserLogout);
   }
 
   FutureOr<void> authSignUp(AuthSignUp event, Emitter<AuthState> emit) async {
@@ -71,5 +75,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   FutureOr<void> emitAuthSuccess(User user, Emitter<AuthState> emit) async {
     _appUserCubit.updateUser(user);
     emit(AuthSuccessState(user: user));
+  }
+
+  FutureOr<void> authUserLogout(
+      AuthUserLogout event, Emitter<AuthState> emit) async {
+    final res = await _logoutUser(NoParams());
+    res.fold(
+      (failure) => emit(AuthFailureState(serverError: failure)),
+      (_) => emit(AuthUserLogoutState()),
+    );
   }
 }

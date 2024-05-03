@@ -66,4 +66,14 @@ class AuthRepositoryImpl implements AuthRepository {
       return left(ServerError.custom(msg: e.message));
     }
   }
+
+  @override
+  Future<Either<ServerError, User?>> userLogout() async {
+    try {
+      await authDataSourceApi.userLogout();
+      return right(null);
+    } on ServerError catch (e) {
+      return left(e);
+    }
+  }
 }

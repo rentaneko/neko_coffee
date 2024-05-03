@@ -4,7 +4,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:neko_coffee/core/common/cubit/app_user_cubit.dart';
 import 'package:neko_coffee/core/theme/theme.dart';
 import 'package:neko_coffee/features/auth/presentation/pages/login_page.dart';
-import 'package:neko_coffee/features/home/presentation/pages/home.screen.dart';
+import 'package:neko_coffee/features/blog/presentation/bloc/blog_bloc.dart';
+import 'package:neko_coffee/features/blog/presentation/page/blog.screen.dart';
 import 'package:neko_coffee/init_dependencies.dart';
 import 'features/auth/bloc/auth_bloc.dart';
 
@@ -20,6 +21,9 @@ void main() async {
         ),
         BlocProvider(
           create: (_) => serviceLocator<AuthBloc>(),
+        ),
+        BlocProvider(
+          create: (_) => serviceLocator<BlogBloc>(),
         ),
       ],
       child: const MyApp(),
@@ -55,7 +59,7 @@ class _MyAppState extends State<MyApp> {
             },
             builder: (context, isLoggedIn) {
               if (isLoggedIn) {
-                return const HomeScreen();
+                return const BlogScreen();
               }
               return const LoginPage();
             },

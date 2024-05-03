@@ -18,6 +18,8 @@ abstract interface class AuthRemoteApi {
   });
 
   Future<UserModel?> getCurrentUserData();
+
+  Future<UserModel?> userLogout();
 }
 
 class AuthRemoteApiImpl implements AuthRemoteApi {
@@ -27,6 +29,12 @@ class AuthRemoteApiImpl implements AuthRemoteApi {
 
   @override
   Session? get currentUserSession => supabaseClient.auth.currentSession;
+
+  @override
+  Future<UserModel?> userLogout() async {
+    await supabaseClient.auth.signOut(scope: SignOutScope.global);
+    return null;
+  }
 
   @override
   Future<UserModel?> getCurrentUserData() async {
