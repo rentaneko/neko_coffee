@@ -1,14 +1,16 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:neko_coffee/core/error/server_error.dart';
+import 'package:neko_coffee/core/network/connetion_checker.dart';
 import 'package:neko_coffee/domain/api/auth_api.dart';
 import 'package:neko_coffee/core/entities/user.dart';
+import 'package:neko_coffee/domain/models/user.model.dart';
 import 'package:neko_coffee/domain/repositories/auth_repository.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' as sb;
 
 class AuthRepositoryImpl implements AuthRepository {
   final AuthRemoteApi authDataSourceApi;
-
-  AuthRepositoryImpl(this.authDataSourceApi);
+  final ConnectionChecker connetionChecker;
+  AuthRepositoryImpl(this.authDataSourceApi, this.connetionChecker);
 
   @override
   Future<Either<ServerError, User>> loginWithEmailPassword({
@@ -40,6 +42,10 @@ class AuthRepositoryImpl implements AuthRepository {
 
   Future<Either<ServerError, User>> _getUser(Future<User> Function() fn) async {
     try {
+      if (!await (connetionChecker.isConnected)) {
+        return left(ServerError.network());
+      }
+
       final user = await fn();
       return right(user);
     } on sb.AuthException catch (authException) {
@@ -57,6 +63,20 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<Either<ServerError, User>> currentUser() async {
     try {
+      if (!await (connetionChecker.isConnected)) {
+        final session = authDataSourceApi.currentUserSession;
+
+        if (session == null) {
+          return left(ServerError.custom(msg: 'User not logged in'));
+        }
+        return right(
+          UserModel(
+              fullname: '',
+              email: session.user.email!,
+              phone: '',
+              uid: session.user.id),
+        );
+      }
       final user = await authDataSourceApi.getCurrentUserData();
       if (user == null) {
         return left(ServerError.custom(msg: 'User not logged in'));

@@ -38,10 +38,9 @@ class _LoginPageState extends State<LoginPage> {
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 16.w),
         child: BlocConsumer<AuthBloc, AuthState>(
-          bloc: context.watch<AuthBloc>(),
           listenWhen: (previous, current) => current is! AuthActionEvent,
           buildWhen: (previous, current) => current is AuthEvent,
-          listener: (context, state) {
+          listener: (_, state) {
             if (state is AuthSuccessState) {
               Navigator.of(context).pop();
               Navigator.of(context)
@@ -52,16 +51,14 @@ class _LoginPageState extends State<LoginPage> {
             }
 
             if (state is AuthFailureState) {
-              Navigator.of(context).pop();
               showErrorDialog(
                 context,
                 title: 'Error',
                 descripsion: FailureWidget(error: state.serverError),
-                onPressed: () => Navigator.of(context).pop(),
               );
             }
           },
-          builder: (context, state) {
+          builder: (_, state) {
             switch (state.runtimeType) {
               case AuthFailureState:
                 state as AuthFailureState;
@@ -72,6 +69,9 @@ class _LoginPageState extends State<LoginPage> {
 
               case AuthInitialState:
                 return LoadingWidget();
+
+              case AuthUserIsNotLogged:
+                return _body();
 
               default:
                 return _body();

@@ -1,5 +1,7 @@
 import 'package:get_it/get_it.dart';
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:neko_coffee/core/common/cubit/app_user_cubit.dart';
+import 'package:neko_coffee/core/network/connetion_checker.dart';
 import 'package:neko_coffee/domain/api/auth_api.dart';
 import 'package:neko_coffee/domain/api/blog_api.dart';
 import 'package:neko_coffee/domain/repositories/auth_repository.dart';
@@ -20,8 +22,6 @@ import 'core/secrets/app_secret.dart';
 final serviceLocator = GetIt.instance;
 
 Future<void> initDependencies() async {
-  _initAuth();
-  _initBlog();
   final supabase = await Supabase.initialize(
     url: AppSecrets.supabaseUrl,
     anonKey: AppSecrets.supabaseAnonKey,
@@ -35,9 +35,15 @@ Future<void> initDependencies() async {
   );
 
   serviceLocator.registerLazySingleton(() => supabase.client);
+  serviceLocator.registerFactory(() => InternetConnection());
 
   // core
   serviceLocator.registerLazySingleton(() => AppUserCubit());
+  serviceLocator.registerFactory<ConnectionChecker>(
+      () => ConnectionCheckerImpl(serviceLocator()));
+
+  _initAuth();
+  _initBlog();
 }
 
 void _initAuth() {
@@ -45,7 +51,7 @@ void _initAuth() {
       () => AuthRemoteApiImpl(serviceLocator()));
 
   serviceLocator.registerFactory<AuthRepository>(
-    () => AuthRepositoryImpl(serviceLocator()),
+    () => AuthRepositoryImpl(serviceLocator(), serviceLocator()),
   );
 
   serviceLocator.registerFactory(() => UserSignUp(serviceLocator()));

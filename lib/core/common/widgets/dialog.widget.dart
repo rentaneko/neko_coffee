@@ -291,69 +291,63 @@ Future<void> showErrorDialog(
   BuildContext context, {
   required String title,
   required Widget descripsion,
-  void Function()? onPressed,
   String? textAction,
 }) async {
   await showGeneralDialog(
     context: context,
     barrierLabel: 'Barrier',
-    barrierDismissible: false,
     barrierColor: Colors.black.withOpacity(0.5),
     transitionDuration: const Duration(milliseconds: 300),
-    pageBuilder: (context, __, ___) {
+    pageBuilder: (_, __, ___) {
       return Dialog(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
         ),
         elevation: 0,
         backgroundColor: Colors.transparent,
-        child: Stack(
-          children: <Widget>[
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.only(
-                  left: 20, top: 20, right: 20, bottom: 20),
-              margin: const EdgeInsets.only(top: 20),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: Colors.red, width: 3),
+        child: Container(
+          width: double.infinity,
+          padding:
+              const EdgeInsets.only(left: 20, top: 20, right: 20, bottom: 20),
+          margin: const EdgeInsets.only(top: 20),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: Colors.red, width: 3),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: 18.sp,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.red,
+                ),
               ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Text(
-                    title,
+              SizedBox(height: 22.h),
+              descripsion,
+              SizedBox(height: 20.h),
+              ElevatedButton(
+                onPressed: () => Navigator.pop(context),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red,
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Text(
+                    textAction ?? 'Ok',
                     style: TextStyle(
-                      fontSize: 18.sp,
+                      fontSize: 16.sp,
                       fontWeight: FontWeight.w700,
-                      color: Colors.red,
+                      color: Colors.white,
                     ),
                   ),
-                  SizedBox(height: 22.h),
-                  descripsion,
-                  SizedBox(height: 20.h),
-                  ElevatedButton(
-                    onPressed: onPressed,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red,
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Text(
-                        textAction ?? 'Ok',
-                        style: TextStyle(
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ],
+                ),
+              )
+            ],
+          ),
         ),
       );
     },
