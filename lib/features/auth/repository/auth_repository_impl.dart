@@ -1,7 +1,7 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:neko_coffee/core/error/server_error.dart';
 import 'package:neko_coffee/core/network/connetion_checker.dart';
-import 'package:neko_coffee/domain/api/auth_api.dart';
+import 'package:neko_coffee/domain/datasource/remote/auth_api.dart';
 import 'package:neko_coffee/core/entities/user.dart';
 import 'package:neko_coffee/domain/models/user.model.dart';
 import 'package:neko_coffee/domain/repositories/auth_repository.dart';

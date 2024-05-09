@@ -4,7 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:neko_coffee/core/error/server_error.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import '../models/blog.model.dart';
+import '../../models/blog.model.dart';
 
 abstract interface class BlogApi {
   Future<BlogModel> uploadBlog(BlogModel blog);
@@ -35,8 +35,7 @@ class BlogApiImpl implements BlogApi {
   Future<String> uploadBlogImage(
       {required File image, required BlogModel blog}) async {
     try {
-      client.storage.from('blog_images').upload(blog.id, image);
-
+      await client.storage.from('blog_images').upload(blog.id, image);
       return client.storage.from('blog_images').getPublicUrl(blog.id);
     } on DioException catch (e) {
       throw ServerError.handleException(e);

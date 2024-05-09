@@ -11,15 +11,14 @@ class BlogCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        height: 200.w,
-        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 16.w),
+        margin: EdgeInsets.symmetric(horizontal: 12.w),
         decoration: BoxDecoration(
           borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(8),
             topRight: Radius.circular(8),
           ),
           color: Colors.white,
-          border: Border.all(color: Colors.pink.shade700, width: 5),
+          border: Border.all(color: Colors.pink.shade700, width: 2),
         ),
         child: Column(
           children: [
@@ -33,7 +32,8 @@ class BlogCard extends StatelessWidget {
                 errorWidget: (context, url, error) =>
                     SvgPicture.asset('assets/svg/invalidImage.svg'),
                 fit: BoxFit.cover,
-                height: 80.w,
+                height: 120.w,
+                width: double.infinity,
               ),
             ),
             SizedBox(height: 12.w),
@@ -55,6 +55,7 @@ class BlogCard extends StatelessWidget {
               ),
               maxLines: null,
             ),
+            SizedBox(height: 12.w),
           ],
         ));
   }

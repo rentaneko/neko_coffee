@@ -1,9 +1,11 @@
 import 'package:get_it/get_it.dart';
+import 'package:hive/hive.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:neko_coffee/core/common/cubit/app_user_cubit.dart';
 import 'package:neko_coffee/core/network/connetion_checker.dart';
-import 'package:neko_coffee/domain/api/auth_api.dart';
-import 'package:neko_coffee/domain/api/blog_api.dart';
+import 'package:neko_coffee/domain/datasource/local/blog_local_data.dart';
+import 'package:neko_coffee/domain/datasource/remote/auth_api.dart';
+import 'package:neko_coffee/domain/datasource/remote/blog_api.dart';
 import 'package:neko_coffee/domain/repositories/auth_repository.dart';
 import 'package:neko_coffee/domain/repositories/blog_repository.dart';
 import 'package:neko_coffee/domain/usecase/current_user.dart';
@@ -16,6 +18,7 @@ import 'package:neko_coffee/features/auth/bloc/auth_bloc.dart';
 import 'package:neko_coffee/features/auth/repository/auth_repository_impl.dart';
 import 'package:neko_coffee/features/blog/presentation/bloc/blog_bloc.dart';
 import 'package:neko_coffee/features/blog/repository/blog_repository_impl.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'core/secrets/app_secret.dart';
 
@@ -34,7 +37,10 @@ Future<void> initDependencies() async {
     ),
   );
 
+  Hive.defaultDirectory = (await getApplicationCacheDirectory()).path;
+
   serviceLocator.registerLazySingleton(() => supabase.client);
+  serviceLocator.registerLazySingleton(() => Hive.box(name: 'blogs'));
   serviceLocator.registerFactory(() => InternetConnection());
 
   // core
@@ -77,9 +83,16 @@ void _initBlog() {
   serviceLocator
     //data source
     ..registerFactory<BlogApi>(() => BlogApiImpl(serviceLocator()))
+    ..registerFactory<BlogLocalDataSource>(
+        () => BlogLocalDataSourceImpl(serviceLocator()))
     // repository
     ..registerFactory<BlogRepository>(
-        () => BlogRepositoryImpl(serviceLocator()))
+      () => BlogRepositoryImpl(
+        serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
+      ),
+    )
     // usecase
     ..registerFactory(() => UploadBlog(serviceLocator()))
     ..registerFactory(() => GetAllBlog(serviceLocator()))
