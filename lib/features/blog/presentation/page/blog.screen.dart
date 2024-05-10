@@ -9,7 +9,7 @@ import 'package:neko_coffee/features/auth/presentation/pages/login_page.dart';
 import 'package:neko_coffee/features/blog/presentation/page/add_new_blog.screen.dart';
 import 'package:neko_coffee/features/blog/presentation/widgets/blog_card.widget.dart';
 import '../../../../core/entities/blog.dart';
-import '../bloc/blog_bloc.dart';
+import '../../bloc/blog_bloc.dart';
 
 class BlogScreen extends StatefulWidget {
   const BlogScreen({super.key});

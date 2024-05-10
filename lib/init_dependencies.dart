@@ -16,7 +16,7 @@ import 'package:neko_coffee/domain/usecase/usecase_login.dart';
 import 'package:neko_coffee/domain/usecase/usecase_sign_up.dart';
 import 'package:neko_coffee/features/auth/bloc/auth_bloc.dart';
 import 'package:neko_coffee/features/auth/repository/auth_repository_impl.dart';
-import 'package:neko_coffee/features/blog/presentation/bloc/blog_bloc.dart';
+import 'package:neko_coffee/features/blog/bloc/blog_bloc.dart';
 import 'package:neko_coffee/features/blog/repository/blog_repository_impl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';

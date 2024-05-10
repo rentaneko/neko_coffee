@@ -5,8 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:neko_coffee/core/error/server_error.dart';
 import 'package:neko_coffee/core/use_case/usecase.dart';
 import 'package:neko_coffee/domain/usecase/upload_blog.dart';
-import '../../../../core/entities/blog.dart';
-import '../../../../domain/usecase/get_all_blog.dart';
+import '../../../core/entities/blog.dart';
+import '../../../domain/usecase/get_all_blog.dart';
 part 'blog_event.dart';
 part 'blog_state.dart';
 

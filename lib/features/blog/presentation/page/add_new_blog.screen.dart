@@ -11,7 +11,7 @@ import 'package:neko_coffee/core/common/widgets/dialog.widget.dart';
 import 'package:neko_coffee/core/common/widgets/failure.widget.dart';
 import 'package:neko_coffee/core/common/widgets/loading.widget.dart';
 import 'package:neko_coffee/core/utils/pick_img.function.dart';
-import 'package:neko_coffee/features/blog/presentation/bloc/blog_bloc.dart';
+import 'package:neko_coffee/features/blog/bloc/blog_bloc.dart';
 import 'package:neko_coffee/features/blog/presentation/page/blog.screen.dart';
 import 'package:neko_coffee/features/blog/presentation/widgets/blog_field.widget.dart';
 import 'package:neko_coffee/features/blog/presentation/widgets/pick_img.widget.dart';
