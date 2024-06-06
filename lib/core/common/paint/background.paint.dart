@@ -7,7 +7,7 @@ class BackgroundPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     Paint paint = Paint()
-      ..color = AppPallete.bean.withOpacity(0.7)
+      ..color = AppPallete.brand.withOpacity(0.7)
       ..style = PaintingStyle.fill;
 
     var path = Path();

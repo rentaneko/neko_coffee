@@ -18,13 +18,13 @@ class OnboardingThirdScreen extends StatelessWidget {
           children: [
             Text(
               'Get and Redeem Voucher',
-              style: boldOswald(size: 20, color: AppPallete.white),
+              style: boldOswald(size: 20, color: AppPallete.light),
               textAlign: TextAlign.center,
             ),
             addVerticalSpace(8.w),
             Text(
               'Exciting prizes await you! Redeem yours by collecting all the points after purchase in the app!',
-              style: mediumOswald(size: 16, color: AppPallete.white),
+              style: mediumOswald(size: 16, color: AppPallete.light),
               textAlign: TextAlign.center,
             ),
             addVerticalSpace(16.w),
@@ -35,20 +35,26 @@ class OnboardingThirdScreen extends StatelessWidget {
                 children: [
                   ElevatedButton(
                     onPressed: () => Navigator.of(context).pop(),
-                    style: ElevatedButton.styleFrom(),
+                    style: ElevatedButton.styleFrom(
+                      fixedSize: Size(100.w, 32.w),
+                      backgroundColor: AppPallete.light,
+                    ),
                     child: Text(
                       'Previous',
-                      style: mediumOswald(size: 16, color: AppPallete.bean),
+                      style: mediumOswald(size: 16, color: AppPallete.brand),
                     ),
                   ),
                   indicator(2),
                   ElevatedButton(
                     onPressed: () => Navigator.of(context)
                         .pushNamedAndRemoveUntil('/login', (route) => false),
-                    style: ElevatedButton.styleFrom(),
+                    style: ElevatedButton.styleFrom(
+                      fixedSize: Size(100.w, 32.w),
+                      backgroundColor: AppPallete.light,
+                    ),
                     child: Text(
-                      'Login/Register',
-                      style: mediumOswald(size: 16, color: AppPallete.bean),
+                      'Let\'s go',
+                      style: mediumOswald(size: 16, color: AppPallete.brand),
                     ),
                   ),
                 ],

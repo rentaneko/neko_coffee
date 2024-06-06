@@ -3,7 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:neko_coffee/core/common/cubit/app_user_cubit.dart';
 import 'package:neko_coffee/core/routes/my_routes.dart';
-import 'package:neko_coffee/core/theme/theme.dart';
+import 'package:neko_coffee/core/routes/route_name.dart';
+import 'package:neko_coffee/core/theme/app_pallete.dart';
 import 'package:neko_coffee/features/blog/bloc/blog_bloc.dart';
 import 'package:neko_coffee/init_dependencies.dart';
 import 'features/auth/bloc/auth_bloc.dart';
@@ -48,23 +49,12 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return ScreenUtilInit(
       designSize: const Size(320, 470),
-      builder: (context, child) => SafeArea(
+      builder: (context, child) => const SafeArea(
         child: MaterialApp(
+          color: AppPallete.light,
           debugShowCheckedModeBanner: false,
-          theme: AppTheme.lightThemeMode,
-          initialRoute: '/onboarding-1',
           onGenerateRoute: MyRoutes.generateRoute,
-          // home: BlocSelector<AppUserCubit, AppUserState, bool>(
-          //   selector: (state) {
-          //     return state is AppUserLoggedIn;
-          //   },
-          //   builder: (context, isLoggedIn) {
-          //     if (isLoggedIn) {
-          //       return const BlogScreen();
-          //     }
-          //     return const LoginPage();
-          //   },
-          // ),
+          initialRoute: RoutesName.homePath,
         ),
       ),
     );

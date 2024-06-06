@@ -22,12 +22,12 @@ class OnboardingFirstScreen extends StatelessWidget {
           children: [
             Text(
               'Choose and customize your Drinks',
-              style: boldOswald(size: 20, color: AppPallete.white),
+              style: boldOswald(size: 20, color: AppPallete.light),
             ),
             addVerticalSpace(8.w),
             Text(
               'Customize your own drink exactly how you like it by adding any topping you like!!!',
-              style: mediumOswald(size: 16, color: AppPallete.white),
+              style: mediumOswald(size: 16, color: AppPallete.light),
               textAlign: TextAlign.center,
             ),
             addVerticalSpace(16.w),
@@ -38,20 +38,26 @@ class OnboardingFirstScreen extends StatelessWidget {
                 children: [
                   ElevatedButton(
                     onPressed: () => Navigator.of(context).pop(),
-                    style: ElevatedButton.styleFrom(),
+                    style: ElevatedButton.styleFrom(
+                      fixedSize: Size(100.w, 32.w),
+                      backgroundColor: AppPallete.light,
+                    ),
                     child: Text(
                       'Skip',
-                      style: mediumOswald(size: 16, color: AppPallete.bean),
+                      style: mediumOswald(size: 16, color: AppPallete.brand),
                     ),
                   ),
                   indicator(0),
                   ElevatedButton(
                     onPressed: () =>
                         Navigator.of(context).pushNamed('/onboarding-2'),
-                    style: ElevatedButton.styleFrom(),
+                    style: ElevatedButton.styleFrom(
+                      fixedSize: Size(100.w, 32.w),
+                      backgroundColor: AppPallete.light,
+                    ),
                     child: Text(
                       'Next',
-                      style: mediumOswald(size: 16, color: AppPallete.bean),
+                      style: mediumOswald(size: 16, color: AppPallete.brand),
                     ),
                   ),
                 ],

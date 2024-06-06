@@ -21,13 +21,13 @@ class OnboardingSecondScreen extends StatelessWidget {
           children: [
             Text(
               'Quickly and easly',
-              style: boldOswald(size: 20, color: AppPallete.white),
+              style: boldOswald(size: 20, color: AppPallete.light),
               textAlign: TextAlign.center,
             ),
             addVerticalSpace(8.w),
             Text(
               'You can place your order quickly and easly without wasting time. You can also schedule orders via your smarthphone.',
-              style: mediumOswald(size: 16, color: AppPallete.white),
+              style: mediumOswald(size: 16, color: AppPallete.light),
               textAlign: TextAlign.center,
             ),
             addVerticalSpace(16.w),
@@ -38,20 +38,26 @@ class OnboardingSecondScreen extends StatelessWidget {
                 children: [
                   ElevatedButton(
                     onPressed: () => Navigator.of(context).pop(),
-                    style: ElevatedButton.styleFrom(),
+                    style: ElevatedButton.styleFrom(
+                      fixedSize: Size(100.w, 32.w),
+                      backgroundColor: AppPallete.light,
+                    ),
                     child: Text(
                       'Previous',
-                      style: mediumOswald(size: 16, color: AppPallete.bean),
+                      style: mediumOswald(size: 16, color: AppPallete.brand),
                     ),
                   ),
                   indicator(1),
                   ElevatedButton(
                     onPressed: () =>
                         Navigator.of(context).pushNamed('/onboarding-3'),
-                    style: ElevatedButton.styleFrom(),
+                    style: ElevatedButton.styleFrom(
+                      fixedSize: Size(100.w, 32.w),
+                      backgroundColor: AppPallete.light,
+                    ),
                     child: Text(
                       'Next',
-                      style: mediumOswald(size: 16, color: AppPallete.bean),
+                      style: mediumOswald(size: 16, color: AppPallete.brand),
                     ),
                   ),
                 ],

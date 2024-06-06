@@ -2,29 +2,45 @@ import 'package:flutter/material.dart';
 
 class AppPallete {
   static const Color backgroundColor = Color.fromRGBO(24, 24, 32, 1);
-  static const Color gradient1 = Color.fromRGBO(187, 63, 221, 1);
-  static const Color gradient2 = Color.fromRGBO(251, 109, 169, 1);
-  static const Color gradient3 = Color.fromRGBO(255, 159, 124, 1);
-  static const Color border = Color.fromRGBO(52, 51, 67, 1);
-  static const Color white = Colors.white;
+  static const Color border = Color(0xffD0D0D0);
   static const Color grey = Colors.grey;
-  static const Color error = Colors.redAccent;
   static const Color transparent = Colors.transparent;
 
-  static const Color coffee = Color.fromRGBO(53, 28, 16, 1);
-  static const Color bean = Color.fromRGBO(80, 40, 21, 1);
-  static const Color coffeeBean = Color.fromRGBO(242, 164, 84, 1);
+  static const Color brand = brand700;
+  static const Color secondary = secondary700;
+  static const Color success = Color(0xff43936C);
+  static const Color info = Color(0xff03539E);
+  static const Color error = Color(0xffE33131);
+  static const Color warning = Color(0xffEB9525);
+  static const Color light = Color(0xffFEFEFE);
+  static const Color medium = Color(0xffF0F0F0);
+  static const Color dark = Color(0xff3C3C3C);
+  static const Color paragraph = Color(0xff555555);
+  static const Color nonActive = Color(0xff868686);
+  static const Color disable = Color(0xffCACACA);
+  static const Color hint = Color(0xff8A8A8A);
 
-  static const Color cyan50 = Color(0xffecfeff);
-  static const Color cyan100 = Color(0xffCFFAFE);
-  static const Color cyan200 = Color(0xffA5F3FC);
-  static const Color cyan300 = Color(0xff67E8F9);
-  static const Color cyan400 = Color(0xff22D3EE);
-  static const Color cyan500 = Color(0xff06B6D4);
-  static const Color cyan600 = Color(0xff0891B2);
-  static const Color cyan700 = Color(0xff0E7490);
-  static const Color cyan800 = Color(0xff155E75);
-  static const Color cyan900 = Color(0xff164E63);
+  static const Color brand50 = Color(0xffEFEBE9);
+  static const Color brand100 = Color(0xffD7CCC8);
+  static const Color brand200 = Color(0xffBCAAA4);
+  static const Color brand300 = Color(0xffA1887F);
+  static const Color brand400 = Color(0xff8D6E63);
+  static const Color brand500 = Color(0xff795548);
+  static const Color brand600 = Color(0xff6D4C41);
+  static const Color brand700 = Color(0xff5D4037);
+  static const Color brand800 = Color(0xff4E342E);
+  static const Color brand900 = Color(0xff3E2723);
+
+  static const Color secondary50 = Color(0xffE6EFF3);
+  static const Color secondary100 = Color(0xffC7D6DB);
+  static const Color secondary200 = Color(0xffA6BBC1);
+  static const Color secondary300 = Color(0xff839FA8);
+  static const Color secondary400 = Color(0xff6A8A95);
+  static const Color secondary500 = Color(0xff507783);
+  static const Color secondary600 = Color(0xff456872);
+  static const Color secondary700 = Color(0xff37545D);
+  static const Color secondary800 = Color(0xff2A4149);
+  static const Color secondary900 = Color(0xff1A2C32);
 
   static const Color sky50 = Color(0xffF0F9FF);
   static const Color sky100 = Color(0xffE0F2FE);

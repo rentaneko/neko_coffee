@@ -4,30 +4,30 @@ import 'package:neko_coffee/core/theme/app_pallete.dart';
 
 regularOswald({Color? color, required double size}) => GoogleFonts.oswald(
       fontWeight: FontWeight.w400,
-      color: color ?? AppPallete.bean,
+      color: color ?? AppPallete.dark,
       fontSize: size,
     );
 
 boldOswald({Color? color, required double size}) => GoogleFonts.oswald(
       fontWeight: FontWeight.w700,
-      color: color ?? AppPallete.bean,
+      color: color ?? AppPallete.dark,
       fontSize: size,
     );
 
 lightOswald({Color? color, required double size}) => GoogleFonts.oswald(
       fontWeight: FontWeight.w300,
-      color: color ?? AppPallete.bean,
+      color: color ?? AppPallete.dark,
       fontSize: size,
     );
 
 exlightOswald({Color? color, required double size}) => GoogleFonts.oswald(
       fontWeight: FontWeight.w200,
-      color: color ?? AppPallete.bean,
+      color: color ?? AppPallete.dark,
       fontSize: size,
     );
 
 mediumOswald({Color? color, required double size}) => GoogleFonts.oswald(
       fontWeight: FontWeight.w500,
-      color: color ?? AppPallete.bean,
+      color: color ?? AppPallete.dark,
       fontSize: size,
     );

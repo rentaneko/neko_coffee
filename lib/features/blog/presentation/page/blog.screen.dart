@@ -4,8 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:neko_coffee/core/common/widgets/failure.widget.dart';
 import 'package:neko_coffee/core/common/widgets/loading.widget.dart';
+import 'package:neko_coffee/core/routes/route_name.dart';
 import 'package:neko_coffee/features/auth/bloc/auth_bloc.dart';
-import 'package:neko_coffee/features/auth/presentation/pages/login_page.dart';
 import 'package:neko_coffee/features/blog/presentation/page/add_new_blog.screen.dart';
 import 'package:neko_coffee/features/blog/presentation/widgets/blog_card.widget.dart';
 import '../../../../core/entities/blog.dart';
@@ -35,8 +35,8 @@ class _BlogScreenState extends State<BlogScreen> {
         leading: IconButton(
           onPressed: () {
             context.read<AuthBloc>().add(AuthUserLogout());
-            Navigator.of(context)
-                .pushAndRemoveUntil(LoginPage.route(), (route) => false);
+            Navigator.of(context).pushNamedAndRemoveUntil(
+                RoutesName.loginPath, (route) => false);
           },
           icon: const Icon(Icons.logout),
         ),

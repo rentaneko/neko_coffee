@@ -5,23 +5,21 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:neko_coffee/core/common/widgets/failure.widget.dart';
 import 'package:neko_coffee/core/common/widgets/loading.widget.dart';
-import 'package:neko_coffee/features/auth/presentation/pages/signup_page.dart';
+import 'package:neko_coffee/core/theme/app_pallete.dart';
+import 'package:neko_coffee/core/theme/app_style.dart';
 import 'package:neko_coffee/features/blog/presentation/page/blog.screen.dart';
-import '../../../../core/theme/app_pallete.dart';
 import '../../../../core/common/widgets/dialog.widget.dart';
 import '../../bloc/auth_bloc.dart';
 import '../widgets/auth_field.dart';
-import '../widgets/auth_gradient_button.dart';
 
-class LoginPage extends StatefulWidget {
-  static route() => MaterialPageRoute(builder: (_) => LoginPage());
-  const LoginPage({super.key});
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginScreenState extends State<LoginScreen> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final formKey = GlobalKey<FormState>();
@@ -65,16 +63,24 @@ class _LoginPageState extends State<LoginPage> {
                 return FailureWidget(error: state.serverError);
 
               case AuthSuccessState:
-                return _body();
-
+                return Form(
+                  key: formKey,
+                  child: SingleChildScrollView(child: _body()),
+                );
               case AuthInitialState:
                 return LoadingWidget();
 
               case AuthUserIsNotLogged:
-                return _body();
+                return Form(
+                  key: formKey,
+                  child: SingleChildScrollView(child: _body()),
+                );
 
               default:
-                return _body();
+                return Form(
+                  key: formKey,
+                  child: SingleChildScrollView(child: _body()),
+                );
             }
           },
         ),
@@ -83,31 +89,40 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _body() {
-    return Form(
-      key: formKey,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            'Sign In',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: AppPallete.white,
-              fontSize: 50.spMin,
-            ),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Image.asset(
+          'assets/images/logo-horizontal.png',
+          width: 200.w,
+          height: 220.w,
+        ),
+        SizedBox(height: 32.h),
+        AuthField(hintText: 'Email', controller: emailController),
+        SizedBox(height: 16.h),
+        AuthField(
+          hintText: 'Password',
+          isHide: true,
+          controller: passwordController,
+        ),
+        SizedBox(height: 32.h),
+        ElevatedButton(
+          child: Text(
+            'Login',
+            style: mediumOswald(size: 14, color: AppPallete.light),
           ),
-          SizedBox(height: 32.h),
-          AuthField(hintText: 'Email', controller: emailController),
-          SizedBox(height: 16.h),
-          AuthField(
-            hintText: 'Password',
-            isHide: true,
-            controller: passwordController,
-          ),
-          SizedBox(height: 32.h),
-          AuthGradientButton(
-            title: 'Login',
-            onPess: () {
+          onPressed: () {
+            if (emailController.text.isEmpty &&
+                passwordController.text.isEmpty) {
+              showErrorDialog(
+                context,
+                title: 'Warning',
+                descripsion: Text(
+                  'Complete your data first',
+                  style: mediumOswald(size: 14, color: AppPallete.dark),
+                ),
+              );
+            } else {
               if (formKey.currentState!.validate()) {
                 context.read<AuthBloc>().add(
                       AuthLogin(
@@ -116,29 +131,26 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     );
               }
-            },
-          ),
-          SizedBox(height: 16.h),
-          GestureDetector(
-            onTap: () => Navigator.of(context).push(SignUpPage.route()),
-            child: RichText(
-              text: TextSpan(
-                text: 'Don\'t have an account? ',
-                style: Theme.of(context).textTheme.titleMedium,
-                children: [
-                  TextSpan(
-                    text: 'Sign Up',
-                    style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                          color: AppPallete.gradient2,
-                          fontWeight: FontWeight.bold,
-                        ),
-                  ),
-                ],
-              ),
+            }
+          },
+        ),
+        SizedBox(height: 16.h),
+        GestureDetector(
+          onTap: () => Navigator.of(context).pushReplacementNamed('/signup'),
+          child: RichText(
+            text: TextSpan(
+              text: 'Don\'t have an account? ',
+              style: mediumOswald(size: 14, color: AppPallete.dark),
+              children: [
+                TextSpan(
+                  text: 'Sign Up',
+                  style: mediumOswald(size: 14, color: AppPallete.brand),
+                ),
+              ],
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

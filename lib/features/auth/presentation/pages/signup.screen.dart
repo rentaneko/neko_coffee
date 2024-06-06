@@ -2,18 +2,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:neko_coffee/core/routes/route_name.dart';
 import 'package:neko_coffee/core/theme/app_pallete.dart';
 import 'package:neko_coffee/core/common/widgets/dialog.widget.dart';
 import 'package:neko_coffee/core/common/widgets/failure.widget.dart';
 import 'package:neko_coffee/features/auth/presentation/widgets/auth_field.dart';
-import 'package:neko_coffee/features/auth/presentation/widgets/auth_gradient_button.dart';
-
+import '../../../../core/theme/app_style.dart';
 import '../../../blog/presentation/page/blog.screen.dart';
 import '../../bloc/auth_bloc.dart';
 
 class SignUpPage extends StatefulWidget {
-  static route() => MaterialPageRoute(builder: (_) => SignUpPage());
-
   const SignUpPage({super.key});
 
   @override
@@ -39,7 +37,7 @@ class _SignUpPageState extends State<SignUpPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      backgroundColor: AppPallete.light,
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 16.w),
         child: Form(
@@ -82,15 +80,11 @@ class _SignUpPageState extends State<SignUpPage> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(
-            'Sign Up',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: AppPallete.white,
-              fontSize: 50.sp,
-            ),
+          Image.asset(
+            'assets/images/logo-horizontal.png',
+            width: 200.w,
+            height: 220.w,
           ),
-          SizedBox(height: 32.h),
           AuthField(hintText: 'Name', controller: nameController),
           SizedBox(height: 16.h),
           AuthField(hintText: 'Phone', controller: phoneController),
@@ -103,9 +97,12 @@ class _SignUpPageState extends State<SignUpPage> {
             controller: passwordController,
           ),
           SizedBox(height: 32.h),
-          AuthGradientButton(
-            title: 'Sign up',
-            onPess: () {
+          ElevatedButton(
+            child: Text(
+              'Sign up',
+              style: mediumOswald(size: 16, color: AppPallete.light),
+            ),
+            onPressed: () {
               if (formKey.currentState!.validate()) {
                 context.read<AuthBloc>().add(AuthSignUp(
                       email: emailController.text.trim(),
@@ -117,19 +114,17 @@ class _SignUpPageState extends State<SignUpPage> {
             },
           ),
           SizedBox(height: 16.h),
-          GestureDetector(
-            onTap: () => Navigator.of(context).pop(),
+          TextButton(
+            onPressed: () => Navigator.of(context)
+                .pushReplacementNamed(RoutesName.loginPath),
             child: RichText(
               text: TextSpan(
                 text: 'Already have an account? ',
-                style: Theme.of(context).textTheme.titleMedium,
+                style: mediumOswald(size: 14, color: AppPallete.dark),
                 children: [
                   TextSpan(
                     text: 'Sign In',
-                    style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                          color: AppPallete.gradient2,
-                          fontWeight: FontWeight.bold,
-                        ),
+                    style: mediumOswald(size: 14, color: AppPallete.brand),
                   ),
                 ],
               ),

@@ -11,19 +11,19 @@ Widget indicator(int pageIndex) {
       Container(
         height: 4.w,
         width: 12.w,
-        color: pageIndex == 0 ? AppPallete.coffeeBean : AppPallete.white,
+        color: pageIndex == 0 ? AppPallete.brand : AppPallete.light,
       ),
       addHorizontalSpace(8.w),
       Container(
         height: 4.w,
         width: 12.w,
-        color: pageIndex == 1 ? AppPallete.coffeeBean : AppPallete.white,
+        color: pageIndex == 1 ? AppPallete.brand : AppPallete.light,
       ),
       addHorizontalSpace(8.w),
       Container(
         height: 4.w,
         width: 12.w,
-        color: pageIndex == 2 ? AppPallete.coffeeBean : AppPallete.white,
+        color: pageIndex == 2 ? AppPallete.brand : AppPallete.light,
       ),
     ],
   );

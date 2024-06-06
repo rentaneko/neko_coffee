@@ -1,8 +1,7 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
-
+import 'package:neko_coffee/core/theme/app_style.dart';
 import '../../theme/app_pallete.dart';
 
 class SplashWidget extends StatelessWidget {
@@ -22,11 +21,7 @@ class SplashWidget extends StatelessWidget {
           ),
           SizedBox(height: 10.h),
           DefaultTextStyle(
-            style: GoogleFonts.lato(
-              color: AppPallete.coffee,
-              fontWeight: FontWeight.w700,
-              fontSize: 24,
-            ),
+            style: boldOswald(size: 24, color: AppPallete.brand),
             child: AnimatedTextKit(
               repeatForever: true,
               animatedTexts: [

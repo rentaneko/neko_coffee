@@ -19,7 +19,9 @@ class AuthRepositoryImpl implements AuthRepository {
   }) async {
     return _getUser(
       () async => await authDataSourceApi.loginWithEmailPassword(
-          email: email, password: password),
+        email: email,
+        password: password,
+      ),
     );
   }
 
