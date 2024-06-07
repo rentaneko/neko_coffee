@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:neko_coffee/core/routes/navigation_anim.dart';
 import 'package:neko_coffee/core/routes/route_name.dart';
+import 'package:neko_coffee/features/app/presentation/app.view.dart';
 import 'package:neko_coffee/features/auth/presentation/pages/login.screen.dart';
 import 'package:neko_coffee/features/auth/presentation/pages/signup.screen.dart';
 import 'package:neko_coffee/features/auth/presentation/pages/splash.screen.dart';
-import 'package:neko_coffee/features/onboarding/presentation/onboarding_1.view.dart';
-import 'package:neko_coffee/features/onboarding/presentation/onboarding_2.view.dart';
-import 'package:neko_coffee/features/onboarding/presentation/onboarding_3.view.dart';
+import 'package:neko_coffee/features/app/presentation/onboarding_1.view.dart';
+import 'package:neko_coffee/features/app/presentation/onboarding_2.view.dart';
+import 'package:neko_coffee/features/app/presentation/onboarding_3.view.dart';
 import 'package:neko_coffee/features/product/presentation/views/home.screen.dart';
 
 class MyRoutes {
@@ -35,6 +36,9 @@ class MyRoutes {
         return Fade(page: const SplashScreen(), settings: settings);
       case RoutesName.homePath:
         return SlideVertical(page: const HomeScreen(), settings: settings);
+      case RoutesName.appPath:
+        return Rotation(page: const MainApp(), settings: settings);
+
       default:
     }
     return MaterialPageRoute(

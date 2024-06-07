@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:neko_coffee/features/onboarding/widgets/indicator_custom.dart';
+import 'package:neko_coffee/features/app/widgets/indicator_custom.dart';
 import '../../../core/theme/app_pallete.dart';
 import '../../../core/theme/app_style.dart';
 import '../../../core/utils/utils_common.dart';

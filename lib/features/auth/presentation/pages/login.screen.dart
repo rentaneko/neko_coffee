@@ -1,13 +1,11 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:neko_coffee/core/common/widgets/failure.widget.dart';
 import 'package:neko_coffee/core/common/widgets/loading.widget.dart';
+import 'package:neko_coffee/core/routes/route_name.dart';
 import 'package:neko_coffee/core/theme/app_pallete.dart';
 import 'package:neko_coffee/core/theme/app_style.dart';
-import 'package:neko_coffee/features/blog/presentation/page/blog.screen.dart';
 import '../../../../core/common/widgets/dialog.widget.dart';
 import '../../bloc/auth_bloc.dart';
 import '../widgets/auth_field.dart';
@@ -41,8 +39,8 @@ class _LoginScreenState extends State<LoginScreen> {
           listener: (_, state) {
             if (state is AuthSuccessState) {
               Navigator.of(context).pop();
-              Navigator.of(context)
-                  .pushAndRemoveUntil(BlogScreen.route(), (route) => false);
+              Navigator.of(context).pushNamedAndRemoveUntil(
+                  RoutesName.appPath, (route) => false);
             }
             if (state is AuthLoadingState) {
               showLoadingDialog(context, title: 'Loading...');

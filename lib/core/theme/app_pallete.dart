@@ -12,6 +12,7 @@ class AppPallete {
   static const Color info = Color(0xff03539E);
   static const Color error = Color(0xffE33131);
   static const Color warning = Color(0xffEB9525);
+  static const Color rating = Color(0xffFFB800);
   static const Color light = Color(0xffFEFEFE);
   static const Color medium = Color(0xffF0F0F0);
   static const Color dark = Color(0xff3C3C3C);

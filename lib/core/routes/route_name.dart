@@ -6,4 +6,5 @@ class RoutesName {
   static const String onboardingSecondPath = '/onboarding-2';
   static const String onboardingThirdPath = '/onboarding-3';
   static const String homePath = '/home';
+  static const String appPath = '/app';
 }

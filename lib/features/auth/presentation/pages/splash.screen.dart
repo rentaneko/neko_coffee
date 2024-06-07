@@ -4,8 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
 import 'package:neko_coffee/core/theme/app_pallete.dart';
+import 'package:neko_coffee/features/app/presentation/app.view.dart';
 import '../../../../core/common/cubit/app_user_cubit.dart';
-import '../../../blog/presentation/page/blog.screen.dart';
 import 'login.screen.dart';
 
 class SplashScreen extends StatelessWidget {
@@ -39,7 +39,7 @@ class SplashScreen extends StatelessWidget {
           },
           builder: (context, isLoggedIn) {
             if (isLoggedIn) {
-              return const BlogScreen();
+              return const MainApp();
             } else {
               return const LoginScreen();
             }

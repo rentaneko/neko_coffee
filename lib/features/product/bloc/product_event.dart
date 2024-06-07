@@ -1,8 +1,14 @@
 part of 'product_bloc.dart';
 
-sealed class ProductEvent extends Equatable {
-  const ProductEvent();
+@immutable
+sealed class ProductEvent {}
 
-  @override
-  List<Object> get props => [];
+final class FetchAllProduct extends ProductEvent {}
+
+final class FilterProduct extends ProductEvent {
+  final SortType? price;
+  final bool? isPromo;
+  final List<Product> products;
+
+  FilterProduct({this.price, this.isPromo, required this.products});
 }

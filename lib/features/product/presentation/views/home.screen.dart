@@ -1,67 +1,143 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:neko_coffee/core/common/widgets/custom.tabbar.dart';
+import 'package:neko_coffee/core/common/widgets/failure.widget.dart';
+import 'package:neko_coffee/core/common/widgets/placeholder.widget.dart';
+import 'package:neko_coffee/core/entities/enum.entity.dart';
 import 'package:neko_coffee/core/theme/app_pallete.dart';
-import 'package:neko_coffee/core/theme/app_style.dart';
+import 'package:neko_coffee/core/utils/utils_common.dart';
+import 'package:neko_coffee/features/product/bloc/product_bloc.dart';
+import 'package:neko_coffee/features/product/presentation/widgets/custom.widget.dart';
 import '../../../../core/common/widgets/custom.button.dart';
+import '../../../../core/entities/product.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
   @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    context.read<ProductBloc>().add(FetchAllProduct());
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppPallete.light,
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: Container(
-          margin: EdgeInsets.only(top: 8.w),
-          height: 40.w,
-          child: searchBar(),
-        ),
-        centerTitle: true,
-        actions: [
-          Padding(
-            padding: EdgeInsets.only(top: 8.w),
-            child: IconButton(
-              onPressed: () {},
-              icon:
-                  Image.asset('assets/icons/bell.png', color: AppPallete.brand),
-            ),
-          ),
-        ],
+    return BlocBuilder<ProductBloc, ProductState>(
+      bloc: context.read<ProductBloc>(),
+      builder: (context, state) {
+        if (state is ProductLoading) {
+          return const PlaceholderScreen();
+        }
+        if (state is ProductFailure) {
+          return FailurePage(error: state.error);
+        }
+        if (state is ProductDisplaySuccess) {
+          return Scaffold(
+            backgroundColor: AppPallete.light,
+            appBar: appbar(),
+            body: body(products: state.products),
+          );
+        }
+
+        return Container();
+      },
+    );
+  }
+
+  AppBar appbar() {
+    return AppBar(
+      automaticallyImplyLeading: false,
+      title: Container(
+        margin: EdgeInsets.only(top: 8.w),
+        height: 40.w,
+        child: searchBar(),
       ),
-      body: DefaultTabController(
-        length: 3,
-        child: NestedScrollView(
-          headerSliverBuilder: (context, innerBoxIsScrolled) {
-            return [
-              sliverTabar(),
-            ];
-          },
-          body: TabBarView(
-            children: [
-              buildImage(),
-              buildImage(),
-              buildImage(),
-            ],
+      centerTitle: true,
+      actions: [
+        Padding(
+          padding: EdgeInsets.only(top: 8.w),
+          child: IconButton(
+            onPressed: () {},
+            icon: Image.asset('assets/icons/bell.png', color: AppPallete.brand),
           ),
+        ),
+      ],
+    );
+  }
+
+  Widget body({required List<Product> products}) {
+    return DefaultTabController(
+      length: 3,
+      child: NestedScrollView(
+        headerSliverBuilder: (context, innerBoxIsScrolled) => [sliverTabar()],
+        body: Column(
+          children: [
+            addVerticalSpace(4.w),
+            filterRow(),
+            addVerticalSpace(4.w),
+            tabarView(products),
+          ],
         ),
       ),
     );
   }
 
-  Widget buildImage() {
-    return ListView.builder(
-      shrinkWrap: true,
-      itemCount: 30,
-      physics: const NeverScrollableScrollPhysics(),
-      itemBuilder: (context, index) => Text(
-        'data ============ $index',
-        style: mediumOswald(
-          size: 24,
-          color: AppPallete.brand400,
-        ),
+  Widget tabarView(List<Product> products) {
+    return Expanded(
+      child: TabBarView(
+        children: [
+          CustomWidget.listCardProduct(
+              products: products, category: CategoryEnum.coffee.id),
+          CustomWidget.listCardProduct(
+              products: products, category: CategoryEnum.noncoffee.id),
+          CustomWidget.listCardProduct(
+              products: products, category: CategoryEnum.pastry.id),
+        ],
+      ),
+    );
+  }
+
+  Widget filterRow() {
+    return SizedBox(
+      height: 36.w,
+      child: ListView(
+        shrinkWrap: true,
+        scrollDirection: Axis.horizontal,
+        children: [
+          addHorizontalSpace(12.w),
+          CustomWidget.iconButton(
+            label: 'Filter',
+            iconName: 'filter',
+            onPress: () {},
+          ),
+          // addHorizontalSpace(12.w),
+          // CustomWidget.iconButton(
+          //   label: 'Rating',
+          //   iconName: 'star',
+          //   onPress: () {},
+          // ),
+          addHorizontalSpace(12.w),
+          CustomWidget.iconButton(
+            label: 'Price',
+            iconName: 'dollar-sign',
+            onPress: () {},
+          ),
+          addHorizontalSpace(12.w),
+          CustomWidget.iconButton(
+            label: 'Promo',
+            iconName: 'promo',
+            onPress: () {},
+          ),
+          addHorizontalSpace(12.w),
+        ],
       ),
     );
   }

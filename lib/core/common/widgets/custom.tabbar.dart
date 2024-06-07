@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:neko_coffee/core/entities/enum.entity.dart';
 import '../../theme/app_pallete.dart';
 import '../../theme/app_style.dart';
 
@@ -23,10 +24,10 @@ Widget sliverTabar() {
       labelColor: AppPallete.brand,
       unselectedLabelColor: AppPallete.disable,
       dividerColor: AppPallete.light,
-      tabs: const [
-        Tab(text: 'Coffee'),
-        Tab(text: 'Non Coffee'),
-        Tab(text: 'Pastry'),
+      tabs: [
+        Tab(text: CategoryEnum.coffee.name),
+        Tab(text: CategoryEnum.noncoffee.name),
+        Tab(text: CategoryEnum.pastry.name),
       ],
     ),
   );

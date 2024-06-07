@@ -5,7 +5,7 @@ import 'package:neko_coffee/core/common/cubit/app_user_cubit.dart';
 import 'package:neko_coffee/core/routes/my_routes.dart';
 import 'package:neko_coffee/core/routes/route_name.dart';
 import 'package:neko_coffee/core/theme/app_pallete.dart';
-import 'package:neko_coffee/features/blog/bloc/blog_bloc.dart';
+import 'package:neko_coffee/features/product/bloc/product_bloc.dart';
 import 'package:neko_coffee/init_dependencies.dart';
 import 'features/auth/bloc/auth_bloc.dart';
 
@@ -23,7 +23,7 @@ void main() async {
           create: (_) => serviceLocator<AuthBloc>(),
         ),
         BlocProvider(
-          create: (_) => serviceLocator<BlogBloc>(),
+          create: (_) => serviceLocator<ProductBloc>(),
         ),
       ],
       child: const MyApp(),
@@ -54,7 +54,7 @@ class _MyAppState extends State<MyApp> {
           color: AppPallete.light,
           debugShowCheckedModeBanner: false,
           onGenerateRoute: MyRoutes.generateRoute,
-          initialRoute: RoutesName.homePath,
+          initialRoute: RoutesName.splashPath,
         ),
       ),
     );

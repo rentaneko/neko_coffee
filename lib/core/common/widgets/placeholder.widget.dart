@@ -1,32 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../theme/app_pallete.dart';
 import '../../utils/utils_common.dart';
 
-class PlaceholderScreen extends StatefulWidget {
+class PlaceholderScreen extends StatelessWidget {
   const PlaceholderScreen({super.key});
 
-  @override
-  State<PlaceholderScreen> createState() => _PlaceholderScreenState();
-}
-
-class _PlaceholderScreenState extends State<PlaceholderScreen> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppPallete.light,
-      body: Shimmer.fromColors(
-        baseColor: AppPallete.border,
-        highlightColor: AppPallete.light,
-        child: body(),
-      ),
-    );
-  }
-
-  Widget body() {
+  Widget body(BuildContext context) {
     return ListView(
       padding: EdgeInsets.symmetric(horizontal: 16.w),
       physics: const NeverScrollableScrollPhysics(),
@@ -96,6 +78,18 @@ class _PlaceholderScreenState extends State<PlaceholderScreen> {
         color: AppPallete.medium,
         borderRadius: BorderRadius.circular(8),
         border: Border.all(style: BorderStyle.none),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppPallete.light,
+      body: Shimmer.fromColors(
+        baseColor: AppPallete.border,
+        highlightColor: AppPallete.light,
+        child: body(context),
       ),
     );
   }
