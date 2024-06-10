@@ -17,12 +17,5 @@ final class ProductFailure extends ProductState {
 
 final class ProductDisplaySuccess extends ProductState {
   final List<Product> products;
-
   const ProductDisplaySuccess({required this.products});
-}
-
-final class ProductDisplayFilter extends ProductState {
-  final List<Product> products;
-
-  const ProductDisplayFilter({required this.products});
 }

@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:neko_coffee/core/common/widgets/custom.tabbar.dart';
@@ -10,7 +8,7 @@ import 'package:neko_coffee/core/entities/enum.entity.dart';
 import 'package:neko_coffee/core/theme/app_pallete.dart';
 import 'package:neko_coffee/core/utils/utils_common.dart';
 import 'package:neko_coffee/features/product/bloc/product_bloc.dart';
-import 'package:neko_coffee/features/product/presentation/widgets/custom.widget.dart';
+import 'package:neko_coffee/features/product/presentation/widgets/home.widget.dart';
 import '../../../../core/common/widgets/custom.button.dart';
 import '../../../../core/entities/product.dart';
 
@@ -81,7 +79,7 @@ class _HomeScreenState extends State<HomeScreen> {
         body: Column(
           children: [
             addVerticalSpace(4.w),
-            filterRow(),
+            FilterWidget(products: products),
             addVerticalSpace(4.w),
             tabarView(products),
           ],
@@ -100,43 +98,6 @@ class _HomeScreenState extends State<HomeScreen> {
               products: products, category: CategoryEnum.noncoffee.id),
           CustomWidget.listCardProduct(
               products: products, category: CategoryEnum.pastry.id),
-        ],
-      ),
-    );
-  }
-
-  Widget filterRow() {
-    return SizedBox(
-      height: 36.w,
-      child: ListView(
-        shrinkWrap: true,
-        scrollDirection: Axis.horizontal,
-        children: [
-          addHorizontalSpace(12.w),
-          CustomWidget.iconButton(
-            label: 'Filter',
-            iconName: 'filter',
-            onPress: () {},
-          ),
-          // addHorizontalSpace(12.w),
-          // CustomWidget.iconButton(
-          //   label: 'Rating',
-          //   iconName: 'star',
-          //   onPress: () {},
-          // ),
-          addHorizontalSpace(12.w),
-          CustomWidget.iconButton(
-            label: 'Price',
-            iconName: 'dollar-sign',
-            onPress: () {},
-          ),
-          addHorizontalSpace(12.w),
-          CustomWidget.iconButton(
-            label: 'Promo',
-            iconName: 'promo',
-            onPress: () {},
-          ),
-          addHorizontalSpace(12.w),
         ],
       ),
     );

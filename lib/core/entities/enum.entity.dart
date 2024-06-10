@@ -11,7 +11,7 @@ enum CategoryEnum {
       CategoryEnum.values.firstWhereOrNull((element) => element.id == id);
 }
 
-enum SortType { ascending, descending }
+enum SortType { ascending, descending, none }
 
 extension ListExtension<T> on List<T> {
   T? firstWhereOrNull(bool Function(T element) condition) {
