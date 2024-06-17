@@ -95,10 +95,10 @@ class SlideVertical<T> extends PageRouteBuilder<T> {
             final CurvedAnimation _curvedAnimation =
                 CurvedAnimation(parent: animation1, curve: Curves.ease);
             return SlideTransition(
-              child: page,
               position:
                   Tween<Offset>(begin: const Offset(0.0, 1.0), end: Offset.zero)
                       .animate(_curvedAnimation),
+              child: page,
             );
           },
         );

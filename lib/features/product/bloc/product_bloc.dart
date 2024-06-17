@@ -11,11 +11,10 @@ part 'product_state.dart';
 
 class ProductBloc extends Bloc<ProductEvent, ProductState> {
   final GetAllProduct _getAllProduct;
-
   ProductBloc({required GetAllProduct getAllProduct})
       : _getAllProduct = getAllProduct,
         super(ProductInitial()) {
-    on<ProductEvent>((event, emit) => emit(ProductLoading()));
+    // on<ProductEvent>((event, emit) => emit(ProductLoading()));
     on<FetchAllProduct>(fectchAllProduct);
     on<FilterProduct>(filterProduct);
     on<ResetFilter>(resetFilter);
@@ -23,6 +22,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
 
   FutureOr<void> fectchAllProduct(
       FetchAllProduct event, Emitter<ProductState> emit) async {
+    emit(ProductLoading());
     final res = await _getAllProduct(NoParams());
     res.fold(
       (l) => emit(ProductFailure(l)),

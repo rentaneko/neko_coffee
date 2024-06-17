@@ -10,12 +10,14 @@ import 'package:neko_coffee/domain/repositories/auth_repository.dart';
 import 'package:neko_coffee/domain/repositories/product.repository.dart';
 import 'package:neko_coffee/domain/usecase/current_user.dart';
 import 'package:neko_coffee/domain/usecase/get_all_product.dart';
+import 'package:neko_coffee/domain/usecase/get_category_by_id.dart';
 import 'package:neko_coffee/domain/usecase/logout_user.dart';
 import 'package:neko_coffee/domain/usecase/usecase_login.dart';
 import 'package:neko_coffee/domain/usecase/usecase_sign_up.dart';
 import 'package:neko_coffee/features/auth/bloc/auth_bloc.dart';
 import 'package:neko_coffee/features/auth/repository/auth_repository_impl.dart';
 import 'package:neko_coffee/features/product/bloc/product_bloc.dart';
+import 'package:neko_coffee/features/product/bloc/product_detail/product_detail_bloc.dart';
 import 'package:neko_coffee/features/product/repository/product.repo_impl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -90,9 +92,14 @@ void _initProduct() {
             serviceLocator(), serviceLocator(), serviceLocator()))
         // usecase
         ..registerFactory(() => GetAllProduct(serviceLocator()))
+        ..registerFactory(() => GetCategoryById(serviceLocator()))
         // bloc
-        ..registerLazySingleton(
-            () => ProductBloc(getAllProduct: serviceLocator()))
+        ..registerLazySingleton(() => ProductBloc(
+              getAllProduct: serviceLocator(),
+            ))
+        ..registerLazySingleton(() => ProductDetailBloc(
+              getCategoryById: serviceLocator(),
+            ))
       //
       ;
 }

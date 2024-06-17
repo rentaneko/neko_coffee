@@ -18,3 +18,10 @@ final class ResetFilter extends ProductEvent {
 
   ResetFilter({required this.products});
 }
+
+final class FindCategoryById extends ProductEvent {
+  final String id;
+  final Product product;
+
+  FindCategoryById({required this.id, required this.product});
+}

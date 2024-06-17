@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:neko_coffee/core/entities/enum.entity.dart';
 import 'package:neko_coffee/core/entities/product.dart';
+import 'package:neko_coffee/core/routes/route_name.dart';
 import 'package:neko_coffee/core/utils/utils_common.dart';
 import 'package:neko_coffee/features/product/bloc/product_bloc.dart';
 import '../../../../core/theme/app_pallete.dart';
@@ -119,8 +120,18 @@ class CustomWidget {
       shrinkWrap: true,
       itemCount: result.length,
       physics: const NeverScrollableScrollPhysics(),
-      itemBuilder: (context, index) =>
-          CustomWidget.cardProduct(product: result[index]),
+      itemBuilder: (context, index) {
+        return InkWell(
+          onTap: () {
+            Navigator.pushNamed(
+              context,
+              RoutesName.detailPath,
+              arguments: result[index],
+            );
+          },
+          child: CustomWidget.cardProduct(product: result[index]),
+        );
+      },
       separatorBuilder: (context, index) => const Divider(
         color: AppPallete.dark,
         thickness: 0.5,

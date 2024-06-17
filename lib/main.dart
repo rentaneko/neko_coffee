@@ -6,6 +6,7 @@ import 'package:neko_coffee/core/routes/my_routes.dart';
 import 'package:neko_coffee/core/routes/route_name.dart';
 import 'package:neko_coffee/core/theme/app_pallete.dart';
 import 'package:neko_coffee/features/product/bloc/product_bloc.dart';
+import 'package:neko_coffee/features/product/bloc/product_detail/product_detail_bloc.dart';
 import 'package:neko_coffee/init_dependencies.dart';
 import 'features/auth/bloc/auth_bloc.dart';
 
@@ -24,6 +25,9 @@ void main() async {
         ),
         BlocProvider(
           create: (_) => serviceLocator<ProductBloc>(),
+        ),
+        BlocProvider(
+          create: (_) => serviceLocator<ProductDetailBloc>(),
         ),
       ],
       child: const MyApp(),

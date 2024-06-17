@@ -13,6 +13,14 @@ enum CategoryEnum {
 
 enum SortType { ascending, descending, none }
 
+enum SizeCup { regular, medium, large }
+
+enum VariantType { hot, ice }
+
+enum IceType { less, normal, more, none }
+
+enum SugarType { less, normal, more }
+
 extension ListExtension<T> on List<T> {
   T? firstWhereOrNull(bool Function(T element) condition) {
     for (final element in this) {
