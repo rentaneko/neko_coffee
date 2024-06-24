@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:neko_coffee/core/entities/enum.entity.dart';
 import 'package:neko_coffee/core/theme/app_style.dart';
+import 'package:neko_coffee/features/cart/bloc/add_to_cart/add_to_cart_bloc.dart';
 
 import '../../theme/app_pallete.dart';
 
@@ -33,12 +35,20 @@ class _ChipSelectionState extends State<ChipSelection> {
         List<SugarType> sugar = [
           SugarType.less,
           SugarType.normal,
-          SugarType.more
+          SugarType.more,
         ];
         return List.generate(
           sugar.length,
           (int index) {
-            return chip(label: sugar[index].name, index: index);
+            return chip(
+              label: sugar[index].name,
+              index: index,
+              onPress: () {
+                context
+                    .read<AddToCartBloc>()
+                    .add(UpdateSizeCupEvent(type: sugar[index].name));
+              },
+            );
           },
         ).toList();
       case "size":
@@ -46,7 +56,15 @@ class _ChipSelectionState extends State<ChipSelection> {
         return List.generate(
           size.length,
           (int index) {
-            return chip(label: size[index].name, index: index);
+            return chip(
+              label: size[index].name,
+              index: index,
+              onPress: () {
+                context
+                    .read<AddToCartBloc>()
+                    .add(UpdateSizeCupEvent(type: size[index].name));
+              },
+            );
           },
         ).toList();
       case "ice":
@@ -54,14 +72,30 @@ class _ChipSelectionState extends State<ChipSelection> {
         return List.generate(
           ice.length,
           (int index) {
-            return chip(label: ice[index].name, index: index);
+            return chip(
+              label: ice[index].name,
+              index: index,
+              onPress: () {
+                context
+                    .read<AddToCartBloc>()
+                    .add(UpdateIceTypeEvent(type: ice[index].name));
+              },
+            );
           },
         ).toList();
       case "variant":
         List<VariantType> variant = [VariantType.ice, VariantType.hot];
         return List.generate(
           variant.length,
-          (index) => chip(label: variant[index].name, index: index),
+          (index) => chip(
+            label: variant[index].name,
+            index: index,
+            onPress: () {
+              context
+                  .read<AddToCartBloc>()
+                  .add(UpdateVariantEvent(type: variant[index].name));
+            },
+          ),
         );
 
       default:
@@ -72,7 +106,8 @@ class _ChipSelectionState extends State<ChipSelection> {
     }
   }
 
-  Widget chip({required String label, required int index}) {
+  Widget chip(
+      {required String label, required int index, required Function onPress}) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 4.w),
       child: ChoiceChip(
@@ -96,6 +131,7 @@ class _ChipSelectionState extends State<ChipSelection> {
           setState(() {
             value = selected ? index : index;
           });
+          onPress();
         },
       ),
     );

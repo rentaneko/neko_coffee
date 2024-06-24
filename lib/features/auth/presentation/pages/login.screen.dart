@@ -66,7 +66,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: SingleChildScrollView(child: _body()),
                 );
               case AuthInitialState:
-                return LoadingWidget();
+                return const LoadingWidget();
 
               case AuthUserIsNotLogged:
                 return Form(

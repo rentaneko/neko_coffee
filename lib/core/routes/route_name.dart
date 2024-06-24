@@ -8,4 +8,5 @@ class RoutesName {
   static const String homePath = '/home';
   static const String appPath = '/app';
   static const String detailPath = '/detail';
+  static const String addToCartPath = '/addToCart';
 }

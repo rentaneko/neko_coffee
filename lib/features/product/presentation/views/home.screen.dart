@@ -93,11 +93,17 @@ class _HomeScreenState extends State<HomeScreen> {
       child: TabBarView(
         children: [
           CustomWidget.listCardProduct(
-              products: products, category: CategoryEnum.coffee.id),
+            products: products,
+            category: CategoryEnum.coffee.id,
+          ),
           CustomWidget.listCardProduct(
-              products: products, category: CategoryEnum.noncoffee.id),
+            products: products,
+            category: CategoryEnum.noncoffee.id,
+          ),
           CustomWidget.listCardProduct(
-              products: products, category: CategoryEnum.pastry.id),
+            products: products,
+            category: CategoryEnum.pastry.id,
+          ),
         ],
       ),
     );

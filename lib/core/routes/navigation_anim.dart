@@ -14,11 +14,11 @@ class Fade<T> extends PageRouteBuilder<T> {
               Animation<double> animation1,
               Animation<double> animation2,
               Widget page) {
-            final CurvedAnimation _curvedAnimation =
+            final CurvedAnimation curvedAnimation =
                 CurvedAnimation(parent: animation1, curve: Curves.ease);
             return FadeTransition(
               opacity:
-                  Tween<double>(begin: 0.0, end: 1.0).animate(_curvedAnimation),
+                  Tween<double>(begin: 0.0, end: 1.0).animate(curvedAnimation),
               child: page,
             );
           },
@@ -39,12 +39,12 @@ class Rotation<T> extends PageRouteBuilder<T> {
               Animation<double> animation1,
               Animation<double> animation2,
               Widget page) {
-            final CurvedAnimation _curvedAnimation =
+            final CurvedAnimation curvedAnimation =
                 CurvedAnimation(parent: animation1, curve: Curves.ease);
             return RotationTransition(
               alignment: Alignment.center,
               turns:
-                  Tween<double>(begin: 0.0, end: 1.0).animate(_curvedAnimation),
+                  Tween<double>(begin: 0.0, end: 1.0).animate(curvedAnimation),
               child: page,
             );
           },
@@ -65,12 +65,12 @@ class SlideLeftRoute<T> extends PageRouteBuilder<T> {
               Animation<double> animation1,
               Animation<double> animation2,
               Widget page) {
-            final CurvedAnimation _curvedAnimation =
+            final CurvedAnimation curvedAnimation =
                 CurvedAnimation(parent: animation1, curve: Curves.ease);
             return SlideTransition(
               position:
                   Tween<Offset>(begin: const Offset(1.0, 0.0), end: Offset.zero)
-                      .animate(_curvedAnimation),
+                      .animate(curvedAnimation),
               child: page,
             );
           },
@@ -92,12 +92,12 @@ class SlideVertical<T> extends PageRouteBuilder<T> {
               Animation<double> animation1,
               Animation<double> animation2,
               Widget page) {
-            final CurvedAnimation _curvedAnimation =
+            final CurvedAnimation curvedAnimation =
                 CurvedAnimation(parent: animation1, curve: Curves.ease);
             return SlideTransition(
               position:
                   Tween<Offset>(begin: const Offset(0.0, 1.0), end: Offset.zero)
-                      .animate(_curvedAnimation),
+                      .animate(curvedAnimation),
               child: page,
             );
           },

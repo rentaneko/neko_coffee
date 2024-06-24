@@ -125,8 +125,8 @@ class CustomWidget {
           onTap: () {
             Navigator.pushNamed(
               context,
-              RoutesName.detailPath,
-              arguments: result[index],
+              RoutesName.addToCartPath,
+              arguments: [result[index], category],
             );
           },
           child: CustomWidget.cardProduct(product: result[index]),

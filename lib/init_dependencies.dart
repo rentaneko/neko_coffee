@@ -5,19 +5,24 @@ import 'package:neko_coffee/core/common/cubit/app_user_cubit.dart';
 import 'package:neko_coffee/core/network/connetion_checker.dart';
 import 'package:neko_coffee/domain/datasource/local/product.local.dart';
 import 'package:neko_coffee/domain/datasource/remote/auth_api.dart';
+import 'package:neko_coffee/domain/datasource/remote/cart_api.dart';
 import 'package:neko_coffee/domain/datasource/remote/product_api.dart';
 import 'package:neko_coffee/domain/repositories/auth_repository.dart';
+import 'package:neko_coffee/domain/repositories/cart.repository.dart';
 import 'package:neko_coffee/domain/repositories/product.repository.dart';
+import 'package:neko_coffee/domain/usecase/add_to_cart.dart';
 import 'package:neko_coffee/domain/usecase/current_user.dart';
 import 'package:neko_coffee/domain/usecase/get_all_product.dart';
-import 'package:neko_coffee/domain/usecase/get_category_by_id.dart';
+import 'package:neko_coffee/domain/usecase/get_topping_by_id.dart';
 import 'package:neko_coffee/domain/usecase/logout_user.dart';
 import 'package:neko_coffee/domain/usecase/usecase_login.dart';
 import 'package:neko_coffee/domain/usecase/usecase_sign_up.dart';
 import 'package:neko_coffee/features/auth/bloc/auth_bloc.dart';
 import 'package:neko_coffee/features/auth/repository/auth_repository_impl.dart';
+import 'package:neko_coffee/features/cart/bloc/add_to_cart/add_to_cart_bloc.dart';
+import 'package:neko_coffee/features/cart/bloc/cart/cart_bloc.dart';
+import 'package:neko_coffee/features/cart/repository/cart.repo_impl.dart';
 import 'package:neko_coffee/features/product/bloc/product_bloc.dart';
-import 'package:neko_coffee/features/product/bloc/product_detail/product_detail_bloc.dart';
 import 'package:neko_coffee/features/product/repository/product.repo_impl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -51,6 +56,7 @@ Future<void> initDependencies() async {
 
   _initAuth();
   _initProduct();
+  _initCart();
 }
 
 void _initAuth() {
@@ -87,19 +93,42 @@ void _initProduct() {
             () => ProductRemoteDataSourceImpl(serviceLocator()))
         ..registerFactory<ProductLocalDataSource>(
             () => ProductLocalDataSourceImpl(serviceLocator()))
+
         // repository
         ..registerFactory<ProductRepository>(() => ProductRepositoryImpl(
             serviceLocator(), serviceLocator(), serviceLocator()))
+
         // usecase
         ..registerFactory(() => GetAllProduct(serviceLocator()))
-        ..registerFactory(() => GetCategoryById(serviceLocator()))
         // bloc
         ..registerLazySingleton(() => ProductBloc(
               getAllProduct: serviceLocator(),
             ))
-        ..registerLazySingleton(() => ProductDetailBloc(
-              getCategoryById: serviceLocator(),
+
+      //
+      ;
+}
+
+void _initCart() {
+  serviceLocator
+        // data source (API for remote, local for local storage)
+        ..registerFactory<CartRemoteDataSource>(
+            () => CartRemoteDataSourcImpl(serviceLocator()))
+        // repository
+        ..registerFactory<CartRepository>(() => CartRepositoryImpl(
+              serviceLocator(),
+              serviceLocator(),
             ))
+        //usecase
+        ..registerFactory(() => AddToCart(serviceLocator()))
+        ..registerFactory(() => GetToppingById(serviceLocator()))
+        // bloc
+        ..registerLazySingleton(() => CartBloc(
+              addToCart: serviceLocator(),
+            ))
+        ..registerLazySingleton(
+            () => AddToCartBloc(getToppingById: serviceLocator()))
+
       //
       ;
 }

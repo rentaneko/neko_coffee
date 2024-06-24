@@ -210,3 +210,36 @@ Widget searchBar() {
     ),
   );
 }
+
+Widget appButton(
+    {required VoidCallback? onPress, double? size, required String label}) {
+  return ElevatedButton(
+    onPressed: onPress,
+    style: ButtonStyle(
+      shape: MaterialStateProperty.resolveWith<RoundedRectangleBorder>(
+        (states) => RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+      ),
+      backgroundColor: MaterialStateProperty.resolveWith<Color>(
+        (states) {
+          if (states.contains(MaterialState.disabled)) {
+            return AppPallete.disable;
+          }
+          return AppPallete.brand;
+        },
+      ),
+      padding: MaterialStateProperty.resolveWith<EdgeInsets>(
+        (states) => EdgeInsets.symmetric(vertical: 12.w, horizontal: 24.w),
+      ),
+      fixedSize: MaterialStateProperty.resolveWith<Size>(
+        (states) => Size(size ?? 156.w, 48.w),
+      ),
+    ),
+    child: Text(
+      label,
+      style: mediumOswald(size: 16, color: AppPallete.light),
+      textAlign: TextAlign.center,
+    ),
+  );
+}

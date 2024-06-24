@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:neko_coffee/core/entities/category.dart';
 import 'package:neko_coffee/core/entities/product.dart';
 import 'package:neko_coffee/core/error/server_error.dart';
 import 'package:neko_coffee/domain/datasource/local/product.local.dart';
@@ -15,7 +14,10 @@ class ProductRepositoryImpl implements ProductRepository {
   final ProductLocalDataSource localSource;
 
   ProductRepositoryImpl(
-      this.connectionChecker, this.dataSource, this.localSource);
+    this.connectionChecker,
+    this.dataSource,
+    this.localSource,
+  );
 
   @override
   Future<Either<ServerError, List<Product>>> getAllProduct() async {
@@ -35,16 +37,6 @@ class ProductRepositoryImpl implements ProductRepository {
       }
       final products = await dataSource.getAllProduct();
       return right(products);
-    } on DioException catch (e) {
-      return left(ServerError.handleException(e));
-    }
-  }
-
-  @override
-  Future<Either<ServerError, Category>> getCategoryById(String id) async {
-    try {
-      final category = await dataSource.getCategoryById(id);
-      return right(category);
     } on DioException catch (e) {
       return left(ServerError.handleException(e));
     }
