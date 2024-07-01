@@ -1,8 +1,9 @@
 import 'package:neko_coffee/core/entities/cart.dart';
 
+// ignore: must_be_immutable
 class CartItemModel extends CartItem {
   CartItemModel({
-    super.id,
+    required super.id,
     required super.idProduct,
     super.idTopping,
     required super.iceType,
@@ -51,7 +52,6 @@ class CartItemModel extends CartItem {
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
-      'id': id,
       'id_product': idProduct,
       'id_topping': idTopping,
       'ice_type': iceType,
@@ -60,6 +60,7 @@ class CartItemModel extends CartItem {
       'sugar_type': sugarType,
       'quantity': quantity,
       'id_user': idUser,
+      'id': id,
     };
   }
 }

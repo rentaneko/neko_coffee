@@ -26,9 +26,8 @@ class AddToCartScreen extends StatefulWidget {
 class _AddToCartScreenState extends State<AddToCartScreen> {
   @override
   void initState() {
-    context
-        .read<AddToCartBloc>()
-        .add(InitialAddToCartEvent(id: widget.category));
+    context.read<AddToCartBloc>().add(InitialAddToCartEvent(
+        idCate: widget.category, idProduct: widget.product.id));
     super.initState();
   }
 
@@ -79,7 +78,9 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
             ),
             appButton(
               onPress: () {
-                context.read<AddToCartBloc>().add(AddItemToCartEvent());
+                context
+                    .read<AddToCartBloc>()
+                    .add(AddItemToCartEvent(idProduct: widget.product.id));
               },
               label: 'Add Order',
             ),

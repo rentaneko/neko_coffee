@@ -18,6 +18,7 @@ class AddToCart implements Usecase<CartItem, AddToCartParams> {
       sugarType: params.sugarType,
       toppings: params.idTopping,
       quantity: params.quantity,
+      id: params.id,
     );
   }
 }
@@ -30,6 +31,7 @@ class AddToCartParams {
   final String sizeCup;
   final String sugarType;
   final int quantity;
+  final String id;
 
   AddToCartParams({
     required this.idProduct,
@@ -39,5 +41,6 @@ class AddToCartParams {
     required this.sizeCup,
     required this.sugarType,
     required this.quantity,
+    required this.id,
   });
 }

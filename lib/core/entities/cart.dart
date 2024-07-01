@@ -1,5 +1,8 @@
-class CartItem {
-  final String? id;
+import 'package:equatable/equatable.dart';
+
+// ignore: must_be_immutable
+class CartItem extends Equatable {
+  String id;
   final String idProduct;
   final List<String>? idTopping;
   final String iceType;
@@ -7,10 +10,10 @@ class CartItem {
   final String sizeCup;
   final String sugarType;
   final int quantity;
-  final String? idUser;
+  String? idUser;
 
   CartItem({
-    this.id,
+    required this.id,
     required this.idProduct,
     required this.idTopping,
     required this.iceType,
@@ -20,4 +23,13 @@ class CartItem {
     required this.quantity,
     this.idUser,
   });
+
+  @override
+  List<Object?> get props => [
+        idTopping,
+        iceType,
+        variantType,
+        sizeCup,
+        sugarType,
+      ];
 }

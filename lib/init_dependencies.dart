@@ -13,6 +13,7 @@ import 'package:neko_coffee/domain/repositories/product.repository.dart';
 import 'package:neko_coffee/domain/usecase/add_to_cart.dart';
 import 'package:neko_coffee/domain/usecase/current_user.dart';
 import 'package:neko_coffee/domain/usecase/get_all_product.dart';
+import 'package:neko_coffee/domain/usecase/get_list_item_by_id.dart';
 import 'package:neko_coffee/domain/usecase/get_topping_by_id.dart';
 import 'package:neko_coffee/domain/usecase/logout_user.dart';
 import 'package:neko_coffee/domain/usecase/usecase_login.dart';
@@ -46,7 +47,7 @@ Future<void> initDependencies() async {
   Hive.defaultDirectory = (await getApplicationCacheDirectory()).path;
 
   serviceLocator.registerLazySingleton(() => supabase.client);
-  serviceLocator.registerLazySingleton(() => Hive.box(name: 'products'));
+
   serviceLocator.registerFactory(() => InternetConnection());
 
   // core
@@ -92,7 +93,7 @@ void _initProduct() {
         ..registerFactory<ProductRemoteDataSource>(
             () => ProductRemoteDataSourceImpl(serviceLocator()))
         ..registerFactory<ProductLocalDataSource>(
-            () => ProductLocalDataSourceImpl(serviceLocator()))
+            () => ProductLocalDataSourceImpl())
 
         // repository
         ..registerFactory<ProductRepository>(() => ProductRepositoryImpl(
@@ -122,12 +123,16 @@ void _initCart() {
         //usecase
         ..registerFactory(() => AddToCart(serviceLocator()))
         ..registerFactory(() => GetToppingById(serviceLocator()))
+        ..registerFactory(() => GetListItemCartById(serviceLocator()))
         // bloc
         ..registerLazySingleton(() => CartBloc(
               addToCart: serviceLocator(),
             ))
-        ..registerLazySingleton(
-            () => AddToCartBloc(getToppingById: serviceLocator()))
+        ..registerLazySingleton(() => AddToCartBloc(
+              getToppingById: serviceLocator(),
+              addToCart: serviceLocator(),
+              getListItem: serviceLocator(),
+            ))
 
       //
       ;

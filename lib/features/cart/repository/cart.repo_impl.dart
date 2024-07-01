@@ -6,7 +6,6 @@ import 'package:neko_coffee/core/error/server_error.dart';
 import 'package:neko_coffee/domain/datasource/remote/cart_api.dart';
 import 'package:neko_coffee/domain/models/cart.model.dart';
 import 'package:neko_coffee/domain/repositories/cart.repository.dart';
-import 'package:uuid/uuid.dart';
 
 import '../../../core/network/connetion_checker.dart';
 
@@ -26,17 +25,19 @@ class CartRepositoryImpl implements CartRepository {
     required String sugarType,
     required List<String> toppings,
     required int quantity,
+    required String id,
   }) async {
     try {
       CartItemModel cartModel = CartItemModel(
         idProduct: idProduct,
         idTopping: toppings,
-        id: const Uuid().v4(),
         iceType: iceType,
         variantType: variantType,
         sizeCup: sizeCup,
         sugarType: sugarType,
         quantity: quantity,
+        id: id,
+        idUser: '',
       );
       final result = await cartRemoteDataSource.addToCart(cartModel);
       return right(result);
@@ -54,6 +55,20 @@ class CartRepositoryImpl implements CartRepository {
       }
       final toppings = await cartRemoteDataSource.getAllToppingById(id);
       return right(toppings);
+    } on DioException catch (e) {
+      return left(ServerError.handleException(e));
+    }
+  }
+
+  @override
+  Future<Either<ServerError, List<CartItem>>> getListItemInCartById(
+      String id) async {
+    try {
+      if (!await connectionChecker.isConnected) {
+        return left(ServerError.network());
+      }
+      final result = await cartRemoteDataSource.getListItemInCartById(id);
+      return right(result);
     } on DioException catch (e) {
       return left(ServerError.handleException(e));
     }

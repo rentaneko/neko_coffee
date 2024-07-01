@@ -9,9 +9,7 @@ abstract interface class ProductLocalDataSource {
 }
 
 class ProductLocalDataSourceImpl implements ProductLocalDataSource {
-  final Box box;
-
-  ProductLocalDataSourceImpl(this.box);
+  Box box = Hive.box(name: 'product');
 
   @override
   List<ProductModel> loadProduct() {

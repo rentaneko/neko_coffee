@@ -29,3 +29,9 @@ final class AddToCartDisplaySuccess extends AddToCartState {
     required this.toppings,
   });
 }
+
+final class AddItemToCartFailure extends AddToCartState {
+  final ServerError error;
+
+  const AddItemToCartFailure({required this.error});
+}

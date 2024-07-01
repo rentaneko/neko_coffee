@@ -11,26 +11,5 @@ class CartBloc extends Bloc<CartEvent, CartState> {
   final AddToCart _addToCart;
   CartBloc({required AddToCart addToCart})
       : _addToCart = addToCart,
-        super(CartInitial()) {
-    on<AddToCartEvent>(addToCartEvent);
-  }
-
-  FutureOr<void> addToCartEvent(
-      AddToCartEvent event, Emitter<CartState> emit) async {
-    final res = await _addToCart(
-      AddToCartParams(
-        idProduct: event.idProduct,
-        idTopping: event.idTopping,
-        iceType: event.iceType,
-        variantType: event.variantType,
-        sizeCup: event.sizeCup,
-        sugarType: event.sugarType,
-        quantity: event.quantity,
-      ),
-    );
-    res.fold(
-      (l) => emit(CartFailure(error: l)),
-      (r) => emit(CartSuccess()),
-    );
-  }
+        super(CartInitial()) {}
 }

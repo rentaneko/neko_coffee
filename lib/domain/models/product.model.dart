@@ -50,7 +50,7 @@ class ProductModel extends Product {
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
       'id': id,
-      'name': 'name',
+      'name': name,
       'ingredient': ingredient,
       'icon_url': iconUrl,
       'price': price,

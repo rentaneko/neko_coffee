@@ -13,7 +13,9 @@ abstract interface class CartRepository {
     required String sugarType,
     required List<String> toppings,
     required int quantity,
+    required String id,
   });
 
   Future<Either<ServerError, List<Topping>>> getAllToppingById(String id);
+  Future<Either<ServerError, List<CartItem>>> getListItemInCartById(String id);
 }

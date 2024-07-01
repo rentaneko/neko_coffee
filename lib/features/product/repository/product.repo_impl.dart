@@ -24,7 +24,6 @@ class ProductRepositoryImpl implements ProductRepository {
     try {
       if (!await connectionChecker.isConnected) {
         final product = localSource.loadProduct();
-
         product.sort((a, b) {
           if (a.isPromo && b.isPromo) return -1;
 
@@ -36,6 +35,7 @@ class ProductRepositoryImpl implements ProductRepository {
         return right(product);
       }
       final products = await dataSource.getAllProduct();
+      localSource.uploadLocalProduct(products: products);
       return right(products);
     } on DioException catch (e) {
       return left(ServerError.handleException(e));

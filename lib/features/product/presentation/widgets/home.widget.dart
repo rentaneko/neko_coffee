@@ -1,6 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:neko_coffee/core/entities/enum.entity.dart';
 import 'package:neko_coffee/core/entities/product.dart';
 import 'package:neko_coffee/core/routes/route_name.dart';
@@ -46,7 +48,11 @@ class CustomWidget {
                 ),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(100),
-                  child: Image.network(product.iconUrl),
+                  child: CachedNetworkImage(
+                    imageUrl: product.iconUrl,
+                    errorWidget: (context, url, error) =>
+                        SvgPicture.asset('assets/svg/invalidImage.svg'),
+                  ),
                 ),
               ),
               Positioned(

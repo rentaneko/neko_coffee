@@ -6,9 +6,10 @@ sealed class AddToCartEvent {
 }
 
 final class InitialAddToCartEvent extends AddToCartEvent {
-  final String id;
+  final String idCate;
+  final String idProduct;
 
-  const InitialAddToCartEvent({required this.id});
+  const InitialAddToCartEvent({required this.idCate, required this.idProduct});
 }
 
 final class UpdateSizeCupEvent extends AddToCartEvent {
@@ -32,4 +33,8 @@ final class UpdateIceTypeEvent extends AddToCartEvent {
   const UpdateIceTypeEvent({required this.type});
 }
 
-final class AddItemToCartEvent extends AddToCartEvent {}
+final class AddItemToCartEvent extends AddToCartEvent {
+  final String idProduct;
+
+  const AddItemToCartEvent({required this.idProduct});
+}
