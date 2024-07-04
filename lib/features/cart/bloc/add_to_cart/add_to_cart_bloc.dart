@@ -2,32 +2,33 @@ import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hive/hive.dart';
 import 'package:neko_coffee/core/entities/cart.dart';
 import 'package:neko_coffee/core/entities/enum.entity.dart';
+import 'package:neko_coffee/core/entities/topping.dart';
 import 'package:neko_coffee/core/error/server_error.dart';
 import 'package:neko_coffee/domain/usecase/add_to_cart.dart';
 import 'package:neko_coffee/domain/usecase/get_list_item_by_id.dart';
 import 'package:neko_coffee/domain/usecase/get_topping_by_id.dart';
-import 'package:uuid/uuid.dart';
-import '../../../../core/entities/topping.dart';
-import '../../../../domain/models/product.model.dart';
+import 'package:neko_coffee/domain/usecase/update_cart_item.dart';
 part 'add_to_cart_event.dart';
 part 'add_to_cart_state.dart';
 
 class AddToCartBloc extends Bloc<AddToCartEvent, AddToCartState> {
-  final GetToppingById _getToppingById;
   final AddToCart _addToCart;
   final GetListItemCartById _getListItemCartById;
+  final UpdateCartItem _updateCartItem;
+  final GetToppingById _getToppingById;
 
-  AddToCartBloc(
-      {required GetToppingById getToppingById,
-      required AddToCart addToCart,
-      required GetListItemCartById getListItem})
-      : _getToppingById = getToppingById,
-        _addToCart = addToCart,
+  AddToCartBloc({
+    required AddToCart addToCart,
+    required GetListItemCartById getListItem,
+    required UpdateCartItem updateCartItem,
+    required GetToppingById getToppingById,
+  })  : _addToCart = addToCart,
         _getListItemCartById = getListItem,
-        super(AddToCartInitial()) {
+        _updateCartItem = updateCartItem,
+        _getToppingById = getToppingById,
+        super(AddToCartInitialState()) {
     on<InitialAddToCartEvent>(initialAddToCartEvent);
     on<UpdateSizeCupEvent>(updateSizeCupEvent);
     on<UpdateIceTypeEvent>(updateIceTypeEvent);
@@ -38,45 +39,112 @@ class AddToCartBloc extends Bloc<AddToCartEvent, AddToCartState> {
 
   FutureOr<void> initialAddToCartEvent(
       InitialAddToCartEvent event, Emitter<AddToCartState> emit) async {
-    emit(AddToCartLoading());
+    emit(AddToCartLoadingState());
     try {
-      final res = await _getToppingById(GetToppingByIdParams(id: event.idCate));
       final result = await _getListItemCartById(
           GetListItemCartParams(idProduct: event.idProduct));
       result.fold((l) => print(l), (r) => cartItem = r);
-      res.fold(
-        (l) => emit(AddToCartFailure(error: l)),
-        (r) {
-          emit(AddToCartDisplaySuccess(
-            toppings: r,
-            iceType: iceType,
-            sizeType: sizeType,
-            sugarType: sugarType,
-            variantType: variantType,
-          ));
-          toppings = r;
-        },
+      final data =
+          await _getToppingById(GetToppingByIdParams(id: event.idCate));
+      data.fold((l) => l, (r) => toppings = r);
+      emit(
+        AddToCartDisplaySuccessState(
+          iceType: iceType,
+          sizeCup: sizeCup,
+          sugarType: sugarType,
+          variantType: variantType,
+          toppings: toppings,
+        ),
       );
     } on DioException catch (e) {
-      emit(AddToCartFailure(error: ServerError.handleException(e)));
+      emit(AddToCartFailureState(error: ServerError.handleException(e)));
     }
   }
 
   String iceType = IceType.normal.name;
   String sugarType = SugarType.normal.name;
   String variantType = VariantType.ice.name;
-  String sizeType = SizeCup.regular.name;
-  List<Topping> toppings = [];
+  String sizeCup = SizeCup.regular.name;
+  String idCartItem = '';
+  int quantityBefor = 0;
+  double total = 0.0;
+
   List<CartItem> cartItem = [];
+  List<Topping> toppings = [];
+
+  FutureOr<void> addItemToCartEvent(
+      AddItemToCartEvent event, Emitter<AddToCartState> emit) async {
+    try {
+      if (checkSameAs()) {
+        int quantity = quantityBefor + 1;
+        //
+        //     final res = await _updateCartItem(
+        //       UpdateCartItemParams(
+        //         id: idCartItem,
+        //         quantity: quantity,
+        //         total: event.price * quantity,
+        //       ),
+        //     );
+        //     res.fold(
+        //       (l) => emit(AddItemToCartFailureState(error: l)),
+        //       (r) => emit(AddToCartSuccessState()),
+        //     );
+
+        //
+      } else {
+        final res = await _addToCart(
+          AddToCartParams(
+            idProduct: event.idProduct,
+            iceType: iceType,
+            variantType: variantType,
+            sizeCup: sizeCup,
+            sugarType: sugarType,
+            quantity: 1,
+            total: event.price,
+          ),
+        );
+
+        res.fold(
+          (l) => emit(AddItemToCartFailureState(error: l)),
+          (r) => emit(AddToCartSuccessState()),
+        );
+      }
+    } on DioException catch (e) {
+      emit(AddItemToCartFailureState(error: ServerError.handleException(e)));
+    }
+  }
+
+  bool checkSameAs() {
+    for (var e in cartItem) {
+      if (e.variantType == variantType &&
+          e.iceType == iceType &&
+          e.sugarType == sugarType &&
+          e.sizeCup == sizeCup) {
+        idCartItem = e.id!;
+        quantityBefor = e.quantity;
+        return true;
+      }
+    }
+    return false;
+  }
+
+  bool listEquals(List<String> list1, List<String> list2) {
+    if (list1.length != list2.length) return false;
+    for (int i = 0; i < list1.length; i++) {
+      if (list1[i] != list2[i]) return false;
+    }
+    return true;
+  }
+
   FutureOr<void> updateSizeCupEvent(
       UpdateSizeCupEvent event, Emitter<AddToCartState> emit) {
-    sizeType = event.type;
+    sizeCup = event.type;
     emit(
-      AddToCartDisplaySuccess(
+      AddToCartDisplaySuccessState(
         iceType: iceType,
         sugarType: sugarType,
         variantType: variantType,
-        sizeType: sizeType,
+        sizeCup: sizeCup,
         toppings: toppings,
       ),
     );
@@ -86,11 +154,11 @@ class AddToCartBloc extends Bloc<AddToCartEvent, AddToCartState> {
       UpdateVariantEvent event, Emitter<AddToCartState> emit) {
     variantType = event.type;
     emit(
-      AddToCartDisplaySuccess(
+      AddToCartDisplaySuccessState(
         iceType: iceType,
         sugarType: sugarType,
         variantType: variantType,
-        sizeType: sizeType,
+        sizeCup: sizeCup,
         toppings: toppings,
       ),
     );
@@ -100,11 +168,11 @@ class AddToCartBloc extends Bloc<AddToCartEvent, AddToCartState> {
       UpdateSugarTypeEvent event, Emitter<AddToCartState> emit) {
     sugarType = event.type;
     emit(
-      AddToCartDisplaySuccess(
+      AddToCartDisplaySuccessState(
         iceType: iceType,
         sugarType: sugarType,
         variantType: variantType,
-        sizeType: sizeType,
+        sizeCup: sizeCup,
         toppings: toppings,
       ),
     );
@@ -114,43 +182,13 @@ class AddToCartBloc extends Bloc<AddToCartEvent, AddToCartState> {
       UpdateIceTypeEvent event, Emitter<AddToCartState> emit) {
     iceType = event.type;
     emit(
-      AddToCartDisplaySuccess(
+      AddToCartDisplaySuccessState(
         iceType: iceType,
         sugarType: sugarType,
         variantType: variantType,
-        sizeType: sizeType,
+        sizeCup: sizeCup,
         toppings: toppings,
       ),
     );
-  }
-
-  FutureOr<void> addItemToCartEvent(
-      AddItemToCartEvent event, Emitter<AddToCartState> emit) async {
-    try {
-      List<String> tmp = [];
-      for (var top in toppings) {
-        if (top.value == true) {
-          tmp.add(top.id);
-        }
-      }
-
-      // final res = await _addToCart(
-      //   AddToCartParams(
-      //     idProduct: event.idProduct,
-      //     idTopping: tmp,
-      //     iceType: iceType,
-      //     variantType: variantType,
-      //     sizeCup: sizeType,
-      //     sugarType: sugarType,
-      //     quantity: 1,
-      //     id: const Uuid().v4().trim(),
-      //   ),
-      // );
-
-      // res.fold(
-      //     (l) => print(l.error), (r) => print('SUCCESS ----------------- $r'));
-    } on DioException catch (e) {
-      emit(AddItemToCartFailure(error: ServerError.handleException(e)));
-    }
   }
 }

@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:neko_coffee/core/common/widgets/custom.button.dart';
+import 'package:neko_coffee/core/common/widgets/dialog.widget.dart';
 import 'package:neko_coffee/core/common/widgets/failure.widget.dart';
 import 'package:neko_coffee/core/common/widgets/loading.widget.dart';
 import 'package:neko_coffee/core/entities/product.dart';
-import 'package:neko_coffee/core/entities/topping.dart';
 import 'package:neko_coffee/core/theme/app_pallete.dart';
 import 'package:neko_coffee/core/theme/app_style.dart';
-
 import '../../../../core/common/widgets/chip.widget.dart';
 import '../../../../core/entities/enum.entity.dart';
+import '../../../../core/entities/topping.dart';
 import '../../../../core/utils/utils_common.dart';
 import '../../bloc/add_to_cart/add_to_cart_bloc.dart';
 
@@ -39,18 +39,34 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
         title: Text('Customize Order', style: mediumOswald(size: 16)),
         centerTitle: true,
       ),
-      body: BlocBuilder<AddToCartBloc, AddToCartState>(
+      body: BlocConsumer<AddToCartBloc, AddToCartState>(
+        listenWhen: (previous, current) => current is! AddToCartActionEvent,
+        buildWhen: (previous, current) => current is AddToCartEvent,
+        listener: (context, state) {
+          if (state is AddItemToCartFailureState) {
+            showErrorDialog(
+              context,
+              title: state.error.message,
+              descripsion: Text(state.error.error),
+            );
+          }
+          if (state is AddToCartSuccessState) {
+            Navigator.of(context).pop();
+          }
+        },
         builder: (context, state) {
-          if (state is AddToCartLoading) {
-            return const LoadingWidget();
+          switch (state.runtimeType) {
+            case AddToCartLoadingState:
+              return const LoadingWidget();
+            case AddToCartFailureState:
+              state as AddToCartFailureState;
+              return FailureWidget(error: state.error);
+            case AddToCartDisplaySuccessState:
+              state as AddToCartDisplaySuccessState;
+              return _body(toppings: state.toppings);
+            default:
+              return const LoadingWidget();
           }
-          if (state is AddToCartFailure) {
-            return FailureWidget(error: state.error);
-          }
-          if (state is AddToCartDisplaySuccess) {
-            return _body(toppings: state.toppings);
-          }
-          return Container();
         },
       ),
       bottomNavigationBar: Container(
@@ -71,16 +87,19 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
                   style: regularOswald(size: 14),
                 ),
                 Text(
-                  '124.98934 \$',
+                  '${widget.product.price} \$',
                   style: boldOswald(size: 16),
                 ),
               ],
             ),
             appButton(
               onPress: () {
-                context
-                    .read<AddToCartBloc>()
-                    .add(AddItemToCartEvent(idProduct: widget.product.id));
+                context.read<AddToCartBloc>().add(
+                      AddItemToCartEvent(
+                        idProduct: widget.product.id,
+                        price: widget.product.price,
+                      ),
+                    );
               },
               label: 'Add Order',
             ),
@@ -96,7 +115,6 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
         children: [
           Stack(
             children: [
-              frameListTopping(toppings: toppings),
               SizedBox(
                 height: MediaQuery.of(context).size.height * .35,
                 width: MediaQuery.of(context).size.width,
@@ -110,6 +128,7 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
                 left: 16.w,
                 child: _detailCard(),
               ),
+              frameListTopping(toppings: toppings),
             ],
           ),
         ],

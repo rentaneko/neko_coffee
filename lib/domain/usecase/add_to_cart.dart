@@ -16,31 +16,28 @@ class AddToCart implements Usecase<CartItem, AddToCartParams> {
       variantType: params.variantType,
       sizeCup: params.sizeCup,
       sugarType: params.sugarType,
-      toppings: params.idTopping,
       quantity: params.quantity,
-      id: params.id,
+      total: params.total,
     );
   }
 }
 
 class AddToCartParams {
   final String idProduct;
-  final List<String> idTopping;
   final String iceType;
   final String variantType;
   final String sizeCup;
   final String sugarType;
   final int quantity;
-  final String id;
+  final double total;
 
   AddToCartParams({
     required this.idProduct,
-    required this.idTopping,
     required this.iceType,
     required this.variantType,
     required this.sizeCup,
     required this.sugarType,
     required this.quantity,
-    required this.id,
+    required this.total,
   });
 }

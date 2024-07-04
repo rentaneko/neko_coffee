@@ -1,7 +1,6 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:neko_coffee/core/entities/cart.dart';
-
-import '../../core/entities/topping.dart';
+import 'package:neko_coffee/core/entities/topping.dart';
 import '../../core/error/server_error.dart';
 
 abstract interface class CartRepository {
@@ -11,11 +10,15 @@ abstract interface class CartRepository {
     required String variantType,
     required String sizeCup,
     required String sugarType,
-    required List<String> toppings,
     required int quantity,
-    required String id,
+    required double total,
   });
 
-  Future<Either<ServerError, List<Topping>>> getAllToppingById(String id);
   Future<Either<ServerError, List<CartItem>>> getListItemInCartById(String id);
+
+  Future<Either<ServerError, CartItem>> updateCartItem(
+      {required String id, required int quantity, required double total});
+
+  Future<Either<ServerError, List<Topping>>> getAllToppingById(
+      {required String idCate});
 }

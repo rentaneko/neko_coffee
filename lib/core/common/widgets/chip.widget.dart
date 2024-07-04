@@ -46,7 +46,7 @@ class _ChipSelectionState extends State<ChipSelection> {
               onPress: () {
                 context
                     .read<AddToCartBloc>()
-                    .add(UpdateSizeCupEvent(type: sugar[index].name));
+                    .add(UpdateSugarTypeEvent(type: sugar[index].name));
               },
             );
           },

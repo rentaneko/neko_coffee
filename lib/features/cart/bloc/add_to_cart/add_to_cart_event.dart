@@ -5,6 +5,11 @@ sealed class AddToCartEvent {
   const AddToCartEvent();
 }
 
+@immutable
+sealed class AddToCartActionEvent extends AddToCartEvent {
+  const AddToCartActionEvent();
+}
+
 final class InitialAddToCartEvent extends AddToCartEvent {
   final String idCate;
   final String idProduct;
@@ -33,8 +38,9 @@ final class UpdateIceTypeEvent extends AddToCartEvent {
   const UpdateIceTypeEvent({required this.type});
 }
 
-final class AddItemToCartEvent extends AddToCartEvent {
+final class AddItemToCartEvent extends AddToCartActionEvent {
   final String idProduct;
+  final double price;
 
-  const AddItemToCartEvent({required this.idProduct});
+  const AddItemToCartEvent({required this.idProduct, required this.price});
 }

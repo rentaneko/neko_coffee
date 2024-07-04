@@ -23,38 +23,20 @@ class CartRepositoryImpl implements CartRepository {
     required String variantType,
     required String sizeCup,
     required String sugarType,
-    required List<String> toppings,
     required int quantity,
-    required String id,
+    required double total,
   }) async {
     try {
       CartItemModel cartModel = CartItemModel(
-        idProduct: idProduct,
-        idTopping: toppings,
-        iceType: iceType,
-        variantType: variantType,
-        sizeCup: sizeCup,
-        sugarType: sugarType,
-        quantity: quantity,
-        id: id,
-        idUser: '',
-      );
+          idProduct: idProduct,
+          iceType: iceType,
+          variantType: variantType,
+          sizeCup: sizeCup,
+          sugarType: sugarType,
+          quantity: quantity,
+          totalAmount: total);
       final result = await cartRemoteDataSource.addToCart(cartModel);
       return right(result);
-    } on DioException catch (e) {
-      return left(ServerError.handleException(e));
-    }
-  }
-
-  @override
-  Future<Either<ServerError, List<Topping>>> getAllToppingById(
-      String id) async {
-    try {
-      if (!await connectionChecker.isConnected) {
-        return left(ServerError.network());
-      }
-      final toppings = await cartRemoteDataSource.getAllToppingById(id);
-      return right(toppings);
     } on DioException catch (e) {
       return left(ServerError.handleException(e));
     }
@@ -68,6 +50,37 @@ class CartRepositoryImpl implements CartRepository {
         return left(ServerError.network());
       }
       final result = await cartRemoteDataSource.getListItemInCartById(id);
+      return right(result);
+    } on DioException catch (e) {
+      return left(ServerError.handleException(e));
+    }
+  }
+
+  @override
+  Future<Either<ServerError, CartItem>> updateCartItem(
+      {required String id,
+      required int quantity,
+      required double total}) async {
+    try {
+      if (!await connectionChecker.isConnected) {
+        return left(ServerError.network());
+      }
+      final result =
+          await cartRemoteDataSource.updateCartItem(id, quantity, total);
+      return right(result);
+    } on DioException catch (e) {
+      return left(ServerError.handleException(e));
+    }
+  }
+
+  @override
+  Future<Either<ServerError, List<Topping>>> getAllToppingById(
+      {required String idCate}) async {
+    try {
+      if (!await connectionChecker.isConnected) {
+        return left(ServerError.network());
+      }
+      final result = await cartRemoteDataSource.getAllToppingById(idCate);
       return right(result);
     } on DioException catch (e) {
       return left(ServerError.handleException(e));

@@ -11,7 +11,7 @@ class GetToppingById implements Usecase<List<Topping>, GetToppingByIdParams> {
   @override
   Future<Either<ServerError, List<Topping>>> call(
       GetToppingByIdParams params) async {
-    return await cartRepository.getAllToppingById(params.id);
+    return await cartRepository.getAllToppingById(idCate: params.id);
   }
 }
 

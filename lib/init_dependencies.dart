@@ -16,6 +16,7 @@ import 'package:neko_coffee/domain/usecase/get_all_product.dart';
 import 'package:neko_coffee/domain/usecase/get_list_item_by_id.dart';
 import 'package:neko_coffee/domain/usecase/get_topping_by_id.dart';
 import 'package:neko_coffee/domain/usecase/logout_user.dart';
+import 'package:neko_coffee/domain/usecase/update_cart_item.dart';
 import 'package:neko_coffee/domain/usecase/usecase_login.dart';
 import 'package:neko_coffee/domain/usecase/usecase_sign_up.dart';
 import 'package:neko_coffee/features/auth/bloc/auth_bloc.dart';
@@ -122,16 +123,18 @@ void _initCart() {
             ))
         //usecase
         ..registerFactory(() => AddToCart(serviceLocator()))
-        ..registerFactory(() => GetToppingById(serviceLocator()))
         ..registerFactory(() => GetListItemCartById(serviceLocator()))
+        ..registerFactory(() => UpdateCartItem(serviceLocator()))
+        ..registerFactory(() => GetToppingById(serviceLocator()))
         // bloc
         ..registerLazySingleton(() => CartBloc(
               addToCart: serviceLocator(),
             ))
         ..registerLazySingleton(() => AddToCartBloc(
-              getToppingById: serviceLocator(),
               addToCart: serviceLocator(),
               getListItem: serviceLocator(),
+              updateCartItem: serviceLocator(),
+              getToppingById: serviceLocator(),
             ))
 
       //
