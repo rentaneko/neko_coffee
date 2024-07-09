@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "37188208288",
+    "project_id": "seine-spotify",
+    "storage_bucket": "seine-spotify.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:37188208288:android:ae4af49f7a7a34b6e36bc5",
+        "android_client_info": {
+          "package_name": "com.example.neko_coffee"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB1IiO2X6mnuXrLktQTsli7Q_Jpoj26bgQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

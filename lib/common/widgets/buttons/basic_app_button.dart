@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:neko_coffee/common/helpers/is_dark_mode.dart';
 
 class BasicAppButton extends StatelessWidget {
   final VoidCallback onPressed;
@@ -12,7 +13,12 @@ class BasicAppButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
-        minimumSize: Size.fromHeight(height ?? 32),
+        minimumSize: Size.fromHeight(height ?? 55),
+        textStyle: TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+          color: context.isDarkMode ? Colors.white : Colors.black,
+        ),
       ),
       child: Text(title),
     );
